@@ -1,0 +1,18 @@
+{
+  "name": "data-source.js",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c --f iife --name DataSource > out.js"
+  },
+  "devDependencies": {
+    "rollup": "^0.51.5",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-typescript": "^0.8.1"
+  },
+  "dependencies": {
+    "global": "^4.3.2",
+    "cropduster": "https://github.com/movableink/cropduster#mn/es6-imports"
+  }
+}
