@@ -22,7 +22,7 @@ export default class DataSource {
     } else {
       const currentKey = pathParts.shift();
       const value = obj[currentKey];
-  
+
       return value ? this.getObjectPath(value, pathParts) : null;
     }
   }
@@ -38,7 +38,7 @@ export default class DataSource {
     const parsedData = JSON.parse(data);
 
     mapping.forEach(mapping => {
-      returnObj[mapping['key']] = this.get(parsedData, mapping['originKey']);
+      returnObj[mapping.key] = this.get(parsedData, mapping.originKey);
     });
 
     return returnObj;
