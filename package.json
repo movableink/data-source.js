@@ -7,6 +7,7 @@
     "build": "rollup -c --f iife --name DataSource > out.js"
   },
   "devDependencies": {
+    "typescript": "2.6.1",
     "rollup": "^0.51.5",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-typescript": "^0.8.1"
