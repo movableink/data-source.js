@@ -4,13 +4,15 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c --f iife --name DataSource > out.js"
+    "build": "rollup -c --f iife --name DataSource > out.js",
+    "test": "karma start"
   },
   "devDependencies": {
     "karma": "^1.7.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-qunit": "^1.2.1",
-    "qunit": "^2.4.1",
+    "karma-rollup-preprocessor": "^5.0.2",
+    "qunitjs": "^2.4.1",
     "rollup": "^0.51.5",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-typescript": "^0.8.1",
