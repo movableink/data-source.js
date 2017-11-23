@@ -1,5 +1,5 @@
 const { module, test } = QUnit;
 
-QUnit.test(function(assert) {
+QUnit.test('test', function(assert) {
   assert.ok(true);
 });
