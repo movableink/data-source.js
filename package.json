@@ -4,16 +4,21 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c --f iife --name DataSource > out.js"
+    "build": "rollup -m -c --f iife --name DataSource -o out.js",
+    "test": "karma start"
   },
   "devDependencies": {
-    "typescript": "2.6.1",
+    "karma": "^1.7.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-qunit": "^1.2.1",
+    "karma-rollup-preprocessor": "^5.0.2",
+    "qunitjs": "^2.4.1",
     "rollup": "^0.51.5",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-typescript": "^0.8.1"
+    "rollup-plugin-typescript": "^0.8.1",
+    "typescript": "2.6.1"
   },
   "dependencies": {
-    "global": "^4.3.2",
     "cropduster": "https://github.com/movableink/cropduster#mn/es6-imports"
   }
 }
