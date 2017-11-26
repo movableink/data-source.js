@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c --f iife --name DataSource > out.js",
+    "build": "rollup -m -c --f iife --name DataSource -o out.js",
     "test": "karma start"
   },
   "devDependencies": {
