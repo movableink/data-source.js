@@ -1,11 +1,11 @@
-# Data Source Client
+# Data Source JS
 
-Data Source Client is a JS library meant to help developers access Movable Ink Data Sources without having to go through a UI.
+Data Source is a JS library meant to help developers access Movable Ink Data Sources and the raw responses associated with their API integrations.
 
 ## Installation
 
 ```
-npm install data-source-client
+npm install data-source
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ npm install data-source-client
 The client is meant to be ran in a browser-like environment. The package itself is meant to be imported through ES6 modules.
 
 ```js
-import DataSourceClient from 'data-source-client';
+import DataSource from 'data-source';
 ```
 
 You will need to transpile your project using a module syntax that is supported in the browser, e.g. CommonJS, AMD
@@ -24,28 +24,15 @@ You will need to transpile your project using a module syntax that is supported 
 
 ```html
 <script>
-  const { key, responseMapping } = MI.options;
-  const targetingKeys = {
-    targeting_1: CD.param('targeting_1'),
-    targeting_2: CD.param('targeting_2')
-  };
+  const key = "unique_datasource_key";  // pulled from the data sources application
 
-  const client = new DataSourceClient(key, responseMapping);
+  const client = new DataSource(key);
 
-  client.getData(targetingKeys, function(data) {
-    // do something with data
+  client.getRawData(function(rawData) {
+    // do something with the raw data
   });
 </script>
 ```
 
-The above example assumes it is running in a context where `MI.options` is injected into the page, similar to most custom apps created in Intelligent Content.
-
-The data pieces required are:
-
-* `key`: The unique identifier of a data source
-* `responseMapping`: An array of objects
-  * Each mapping object contains the following properties:
-    * `key`: The name of the tag which will have its contents replaced by a value
-    * `originKey`: A dot separated path that is used to traverse through the raw response to find a value, i.e. `path.to.value`
-* `targetingKeys`: (Optional) An object whose properties map to the query param pairs that will be merged into the request. Only required if the data source endpoint query params.
-
+The `key` above is supposed to be a unique identifier that refers to the data source that you are trying to receive raw
+data from. You can find this key in the Movable Ink platform.
