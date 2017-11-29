@@ -25,10 +25,14 @@ You will need to transpile your project using a module syntax that is supported 
 ```html
 <script>
   const key = "unique_datasource_key";  // pulled from the data sources application
+  const targetingKeys = {
+    targeting_1: CD.param('targeting_1'),
+    targeting_2: CD.param('targeting_2')
+  }; // optional params that will get passed to sorcerer
 
   const client = new DataSource(key);
 
-  client.getRawData(function(rawData) {
+  client.getRawData(targetingKeys, function(rawData) {
     // do something with the raw data
   });
 </script>
