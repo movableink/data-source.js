@@ -1,21 +1,23 @@
 const { module, test } = QUnit;
 
 import DataSource from '../src/index';
+import CD from 'cropduster';
+import watch from './helpers/spy';
 
-QUnit.test('get returns a value based on a dot separated path', function(assert) {
-  const dataSource = new DataSource();
+QUnit.test('getRawData makes a get request through cropduster with query params', async function(assert) {
+  const spy = watch(CD, 'get');
 
-  const nestedObject = {
-    first: {
-      second: {
-        third: {
-          hi: 'there'
-        }
-      }
-    }
+  const dataSource = new DataSource('some_key');
+
+  assert.expect(1);
+
+  const keys = {
+    targeting_1: "hi",
+    targeting_2: "keys"
   };
 
-  const value = dataSource.get(nestedObject, 'first.second.third.hi');
-
-  assert.equal(value, 'there');
+  await dataSource.getRawData(keys, function(_) {
+    assert.ok(spy.called(1));
+    spy.restore();
+  });
 });
