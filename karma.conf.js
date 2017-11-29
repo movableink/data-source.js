@@ -7,11 +7,12 @@ module.exports = function(config) {
     basePath: '',
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['qunit'],
+    frameworks: ['qunit', 'sinon'],
     plugins: [
       'karma-qunit',
       'karma-chrome-launcher',
-      'karma-rollup-preprocessor'
+      'karma-rollup-preprocessor',
+      'karma-sinon'
     ],
     // list of files / patterns to load in the browser
     files: [
