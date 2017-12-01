@@ -12,7 +12,7 @@ export default class DataSource {
 
   constructor(key: string, map: Mapping[]) {
     this.key = key;
-    this.sorcererUrlBase = 'http://localhost:9292/data_sources';
+    this.sorcererUrlBase = "https://sorcerer.movableink-templates.com/data_sources";
     this.mappings = map;
   }
 
