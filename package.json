@@ -1,11 +1,12 @@
 {
   "name": "data-source.js",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "license": "MIT",
   "scripts": {
     "build": "rollup -m -c --f iife --name DataSource -o out.js",
-    "test": "karma start"
+    "test": "karma start",
+    "postinstall": "tsc -p ./"
   },
   "devDependencies": {
     "karma": "^1.7.1",
