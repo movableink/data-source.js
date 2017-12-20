@@ -22,6 +22,6 @@
   },
   "dependencies": {
     "typescript": "2.6.1",
-    "cropduster": "https://github.com/movableink/cropduster#mn/es6-imports"
+    "cropduster": "https://github.com/movableink/cropduster"
   }
 }
