@@ -1,11 +1,12 @@
 {
   "name": "data-source.js",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "license": "MIT",
   "scripts": {
     "build": "rollup -m -c --f iife --name DataSource -o out.js",
-    "test": "karma start"
+    "test": "karma start",
+    "postinstall": "tsc -p ./"
   },
   "devDependencies": {
     "karma": "^1.7.1",
@@ -17,10 +18,10 @@
     "rollup": "^0.51.5",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-typescript": "^0.8.1",
-    "sinon": "^4.1.2",
-    "typescript": "2.6.1"
+    "sinon": "^4.1.2"
   },
   "dependencies": {
+    "typescript": "2.6.1",
     "cropduster": "https://github.com/movableink/cropduster#mn/es6-imports"
   }
 }
