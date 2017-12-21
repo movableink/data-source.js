@@ -40,3 +40,8 @@ You will need to transpile your project using a module syntax that is supported 
 
 The `key` above is supposed to be a unique identifier that refers to the data source that you are trying to receive raw
 data from. You can find this key in the Movable Ink platform.
+
+## Changelog
+
+### 0.0.1
+  * Initial release
