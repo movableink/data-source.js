@@ -23,6 +23,6 @@
   },
   "dependencies": {
     "typescript": "2.6.1",
-    "cropduster": "https://github.com/movableink/cropduster"
+    "cropduster": "~4.1.0"
   }
 }
