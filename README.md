@@ -43,5 +43,8 @@ data from. You can find this key in the Movable Ink platform.
 
 ## Changelog
 
+### 0.0.2
+  * Fix `No inputs were found in config file` by hardcoding `include` path
+
 ### 0.0.1
   * Initial release
