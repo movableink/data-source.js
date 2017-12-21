@@ -6,7 +6,8 @@
   "scripts": {
     "build": "rollup -m -c --f iife --name DataSource -o out.js",
     "test": "karma start",
-    "postinstall": "tsc -p ./"
+    "postinstall": "tsc -p ./",
+    "prepublishOnly": "tsc -p ./"
   },
   "devDependencies": {
     "karma": "^1.7.1",
