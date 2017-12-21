@@ -43,6 +43,11 @@ data from. You can find this key in the Movable Ink platform.
 
 ## Changelog
 
+### 0.0.3
+  * Remove `src/` as `.npmignore`-ed directory
+    * This was originally added to keep the `.ts` files out of the npm package, as people pulling from npm should just use the built `dist/` directory as the entrypoint to the library. Problem is, is that this then keeps `src/` out of the package when users install through the `git` paths. `tsc` fails due to not having any input directories.
+    * For now, we can remove this and keep the original `src/` in the package, as most users won't be pulling from `npm`.
+
 ### 0.0.2
   * Fix `No inputs were found in config file` by hardcoding `include` path
 
