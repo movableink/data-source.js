@@ -3,9 +3,9 @@
 Data Source is a JS library meant to help developers access Movable Ink Data Sources and the raw responses associated with their API integrations.
 
 ## Installation
-
+Add data sources to your package.json file. In devDependencies include the following:
 ```
-npm install data-source
+"data-source.js": "git@github.com:movableink/data-source.js.git"
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ npm install data-source
 The client is meant to be ran in a browser-like environment. The package itself is meant to be imported through ES6 modules.
 
 ```js
-import DataSource from 'data-source';
+import DataSource from "data-source.js"
 ```
 
 You will need to transpile your project using a module syntax that is supported in the browser, e.g. CommonJS, AMD
