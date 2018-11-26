@@ -32,9 +32,11 @@ You will need to transpile your project using a module syntax that is supported 
 
   const client = new DataSource(key);
 
-  client.getRawData(targetingKeys, function(rawData) {
-    // do something with the raw data
-  });
+  client.getRawData(targetingKeys)
+        .then(raw => {
+          let { data, status contentType, response } = raw;
+          //do something with your data
+        });
 </script>
 ```
 
