@@ -16,6 +16,6 @@ export default class DataSource {
 
     const url = `${this.sorcererUrlBase}/${this.key}?${paramStr}`;
 
-    return CD.get(url, {}, raw => cb(raw));
+    return CD.get(url, {}, cb);
   }
 }
