@@ -15,7 +15,14 @@ export default class DataSource {
     }).join('&');
 
     const url = `${this.sorcererUrlBase}/${this.key}?${paramStr}`;
+    const options = {
+      headers : {}
+    };
 
-    return CD.get(url, {}, cb);
+    options.corsCacheTime = 10 * 1000;
+    options.headers['x-reverse-proxy-ttl'] =  options.corsCacheTime / 1000;
+    options.headers['x-mi-cbe'] = CD._hashForRequest(url, options);
+
+    return CD.get(url, options, cb);
   }
 }
