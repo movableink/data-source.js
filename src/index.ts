@@ -16,10 +16,10 @@ export default class DataSource {
 
     const url = `${this.sorcererUrlBase}/${this.key}?${paramStr}`;
     const options = {
+      corsCacheTime : 10 * 1000,
       headers : {}
     };
 
-    options.corsCacheTime = 10 * 1000;
     options.headers['x-reverse-proxy-ttl'] =  options.corsCacheTime / 1000;
     options.headers['x-mi-cbe'] = CD._hashForRequest(url, options);
 
