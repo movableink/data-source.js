@@ -26,7 +26,7 @@ export default class DataSource {
     return CD.get(url, options, cb);
   }
 
-  getAllRows(params: object) {
+  async getAllRows(params: object) {
     const paramStr = Object.keys(params).map(key => {
       return key + '=' + params[key];
     }).join('&');
@@ -40,6 +40,7 @@ export default class DataSource {
     options.headers['x-reverse-proxy-ttl'] =  options.corsCacheTime / 1000;
     options.headers['x-mi-cbe'] = CD._hashForRequest(url, options);
 
-    return CD.get(url, options);
+    const { data } = await CD.get(url, options);
+    return JSON.parse(data)._meta.all_rows;
   }
 }
