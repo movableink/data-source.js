@@ -35,3 +35,16 @@ QUnit.test('getRawData invokes the callback passed in', async function(assert) {
 
   await dataSource.getRawData(keys, callback);
 });
+
+QUnit.test('getAllRows returns an array of csv data source rows', async function(assert) {
+  const response = { "data": '{"_meta": {"all_rows":[["women","amanda","yellow"],["women","stephanie","blue"],["women","claire","green"]]}}'};
+  sinon.stub(CD, 'get').resolves(response);
+
+  const dataSource = new DataSource('some_key');
+  const key = { gender: "women" };
+
+  const expectedRows = [["women","amanda","yellow"],["women","stephanie","blue"],["women","claire","green"]];
+  const actualRows = await dataSource.getAllRows(key);
+
+  assert.propEqual(actualRows, expectedRows);
+});
