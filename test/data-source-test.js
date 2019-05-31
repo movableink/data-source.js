@@ -37,7 +37,7 @@ QUnit.test('getRawData invokes the callback passed in', async function(assert) {
 });
 
 QUnit.test('getAllRows returns an array of csv data source rows', async function(assert) {
-  const response = { "data": '{"_meta": {"all_rows":[["women","amanda","yellow"],["women","stephanie","blue"],["women","claire","green"]]}}'};
+  const response = { "data": '[["women","amanda","yellow"],["women","stephanie","blue"],["women","claire","green"]]'};
   sinon.stub(CD, 'get').resolves(response);
 
   const dataSource = new DataSource('some_key');
