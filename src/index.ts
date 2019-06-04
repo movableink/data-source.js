@@ -9,7 +9,7 @@ export default class DataSource {
     this.sorcererUrlBase = "https://sorcerer.movableink-templates.com/data_sources";
   }
 
-  getRawData(params: object, cb: Function) {
+  getRawData(params: object, cb?: Function) {
     const paramStr = Object.keys(params).map(key => {
       return key + '=' + params[key];
     }).join('&');
@@ -24,5 +24,13 @@ export default class DataSource {
     options.headers['x-mi-cbe'] = CD._hashForRequest(url, options);
 
     return CD.get(url, options, cb);
+  }
+
+  getAllRows(params: object) {
+    params['mi_multiple'] = true;
+
+    return this.getRawData(params).then(function(response) {
+      return JSON.parse(response.data);
+    });
   }
 }
