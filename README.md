@@ -43,6 +43,31 @@ You will need to transpile your project using a module syntax that is supported 
 The `key` above is supposed to be a unique identifier that refers to the data source that you are trying to receive raw
 data from. You can find this key in the Movable Ink platform.
 
+#### Multiple Rows
+
+To fetch multiple rows you can call `getAllRows(targetingKeys)` which will return an array of rows.
+```
+const targetingKeys = { category: 'food' };
+client.getAllRows(targetingKeys)
+        .then(data => {
+          //do something with your data
+        });
+```
+Assuming CSV file looks like this (where `category` is the targeting segment, `item1` and `item2` are content fields)
+```
+category, item1, item2
+food, apple, banana
+food, cake, rice
+food, fish, pasta
+toys, car, ball
+toys, gun, doll
+
+```
+The returned value will be an array of arrays containing entire rows that match specified targeting keys. The csv header names are not included.
+```
+[["food", "apple", "banana"],["food", "cake", "rice"],["food", "fish", "pasta"]]
+```
+
 ## Changelog
 
 ### 0.0.3
