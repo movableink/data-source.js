@@ -43,6 +43,20 @@ You will need to transpile your project using a module syntax that is supported 
 The `key` above is supposed to be a unique identifier that refers to the data source that you are trying to receive raw
 data from. You can find this key in the Movable Ink platform.
 
+#### Multiple Rows
+
+To fetch multiple rows you can call `getAllRows(targetingKeys)` which will return an array of rows.
+```
+client.getAllRows(targetingKeys)
+        .then(data => {
+          //do something with your data
+        });
+```
+The returned value will be an array of arrays that will look something like this
+```
+[["food", "apple", "banana"],["food", "cake", "rice"],["food", "fish", "pasta"]]
+```
+
 ## Changelog
 
 ### 0.0.3
