@@ -47,12 +47,23 @@ data from. You can find this key in the Movable Ink platform.
 
 To fetch multiple rows you can call `getAllRows(targetingKeys)` which will return an array of rows.
 ```
+const targetingKeys = { category: 'food' };
 client.getAllRows(targetingKeys)
         .then(data => {
           //do something with your data
         });
 ```
-The returned value will be an array of arrays that will look something like this
+Assuming CSV file looks like this (where `category` is the targeting segment, `item1` and `item2` are content fields)
+```
+category, item1, item2
+food, apple, banana
+food, cake, rice
+food, fish, pasta
+toys, car, ball
+toys, gun, doll
+
+```
+The returned value will be an array of arrays containing entire rows that match specified targeting keys. The csv header names are not included.
 ```
 [["food", "apple", "banana"],["food", "cake", "rice"],["food", "fish", "pasta"]]
 ```
