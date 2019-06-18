@@ -72,7 +72,7 @@ The returned value will be an array of arrays containing entire rows that match 
 
 ### 0.1.0
   * Add getAllRows function
-    * Calling this function returns and array of all rows that match supplied targeting keys
+    * Calling this function returns an array of all rows that match supplied targeting keys
 
 ### 0.0.3
   * Remove `src/` as `.npmignore`-ed directory
