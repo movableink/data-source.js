@@ -1,11 +1,11 @@
 # Data Source JS
 
-Data Source is a JS library meant to help developers access Movable Ink Data Sources and the raw responses associated with their API integrations.
+Data Source is a JS library meant to help developers access Movable Ink Data Sources and the raw responses associated with that Data Source.
 
 ## Installation
 Add data sources to your package.json file. In `dependencies` include the following:
 ```
-"data-source.js": "https://github.com/movableink/data-source.js.git#v0.1.0"
+"data-source.js": "https://github.com/movableink/data-source.js.git#v0.1.6"
 ```
 
 ## Usage
@@ -18,55 +18,69 @@ The client is meant to be ran in a browser-like environment. The package itself 
 import DataSource from "data-source.js"
 ```
 
-You will need to transpile your project using a module syntax that is supported in the browser, e.g. CommonJS, AMD
-
 ### Fetching data
 
-```html
-<script>
-  const key = "unique_datasource_key";  // pulled from the data sources application
-  const targetingKeys = {
-    targeting_1: CD.param('targeting_1'),
-    targeting_2: CD.param('targeting_2')
-  }; // optional params that will get passed to sorcerer
+```js
+const key = "unique_datasource_key";  // pulled from the data sources application
+const targetingKeys = {
+targeting_1: CD.param('targeting_1'),
+targeting_2: CD.param('targeting_2')
+}; // optional params that will get passed to sorcerer
 
-  const client = new DataSource(key);
+const source = new DataSource(key);
 
-  client.getRawData(targetingKeys)
-        .then(raw => {
-          let { data, status contentType, response } = raw;
-          //do something with your data
-        });
-</script>
+const { data } = await source.getRawData(targetingKeys);
+//do something with your data
 ```
 
 The `key` above is supposed to be a unique identifier that refers to the data source that you are trying to receive raw
 data from. You can find this key in the Movable Ink platform.
 
-#### Multiple Rows
+### Multiple Row retrieval for CSV Data Sources
 
 To fetch multiple rows you can call `getAllRows(targetingKeys)` which will return an array of rows.
-```
+
+```js
 const targetingKeys = { category: 'food' };
-client.getAllRows(targetingKeys)
-        .then(data => {
-          //do something with your data
-        });
+const { data } = await source.getAllRows(targetingKeys)
+// [["food", "apple", "banana"], ["food", "cake", "rice"], ["food", "fish", "pasta"]]
 ```
-Assuming CSV file looks like this (where `category` is the targeting segment, `item1` and `item2` are content fields)
-```
+
+
+#### Example
+
+Assuming a CSV file that looks like this (where `category` is the targeting segment, `item1` and `item2` are content fields)
+```csv
 category, item1, item2
 food, apple, banana
 food, cake, rice
 food, fish, pasta
 toys, car, ball
 toys, gun, doll
+```
 
-```
 The returned value will be an array of arrays containing entire rows that match specified targeting keys. The csv header names are not included.
+
+```json
+[["food", "apple", "banana"], ["food", "cake", "rice"], ["food", "fish", "pasta"]]
 ```
-[["food", "apple", "banana"],["food", "cake", "rice"],["food", "fish", "pasta"]]
+
+### Including Headers
+You can include a `headers` option to merge the original headers associated with the CSV as part of the response for `getAllRows`.
+
+#### Example
+
+```js
+const targetingKeys = { category: 'food' };
+const { data } = await source.getAllRows(targetingKeys, { headers: true })
+// [
+//   { category: "food", item1: "apple", item:2 "banana" },
+//   { category: "food", item1: "cake", item2: "rice" },
+//   { category: "food", item1: "fish", item2: "pasta" }
+// ]
 ```
+
+The response will be an array of objects, where the keys are the headers and the values are the row's values.
 
 ## Changelog
 
