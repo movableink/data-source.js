@@ -26,8 +26,12 @@ export default class DataSource {
     return CD.get(url, options, cb);
   }
 
-  getAllRows(params: object) {
+  getAllRows(params: object, opts = {}) {
     params['mi_multiple'] = true;
+
+    if (opts['headers']) {
+      params['mi_include_headers'] = true;
+    }
 
     return this.getRawData(params).then(function(response) {
       return JSON.parse(response.data);
