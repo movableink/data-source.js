@@ -5,7 +5,7 @@ Data Source is a JS library meant to help developers access Movable Ink Data Sou
 ## Installation
 Add data sources to your package.json file. In `dependencies` include the following:
 ```
-"data-source.js": "https://github.com/movableink/data-source.js.git#v0.1.0"
+"data-source.js": "https://github.com/movableink/data-source.js.git#v0.2.0"
 ```
 
 ## Usage
@@ -83,6 +83,10 @@ const { data } = await source.getAllRows(targetingKeys, { headers: true })
 The response will be an array of objects, where the keys are the headers and the values are the row's values.
 
 ## Changelog
+
+### 0.2.0
+  * Add `headers` option support to `getAllRows`
+    * Pass `{ headers: true }` as an options argument which will return headers as part of each row's response.
 
 ### 0.1.0
   * Add getAllRows function
