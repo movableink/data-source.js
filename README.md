@@ -42,7 +42,7 @@ To fetch multiple rows you can call `getAllRows(targetingKeys)` which will retur
 
 ```js
 const targetingKeys = { category: 'food' };
-const { data } = await source.getAllRows(targetingKeys)
+const rows = await source.getAllRows(targetingKeys)
 // [["food", "apple", "banana"], ["food", "cake", "rice"], ["food", "fish", "pasta"]]
 ```
 
@@ -72,7 +72,7 @@ You can include a `headers` option to merge the original headers associated with
 
 ```js
 const targetingKeys = { category: 'food' };
-const { data } = await source.getAllRows(targetingKeys, { headers: true })
+const rows = await source.getAllRows(targetingKeys, { headers: true })
 // [
 //   { category: "food", item1: "apple", item:2 "banana" },
 //   { category: "food", item1: "cake", item2: "rice" },
