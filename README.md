@@ -82,6 +82,48 @@ const rows = await source.getAllRows(targetingKeys, { headers: true })
 
 The response will be an array of objects, where the keys are the headers and the values are the row's values.
 
+### Geolocation
+You can also retrieve rows through our GIS capabilities by providing latitude and longitude coordinates while using `getAllRows`.
+
+#### Example
+
+This is assuming a CSV Data Source was created with columns `gap_latitude` and `gap_longitude` specified to be targeted using `latitude` and `longitude` respectively.
+
+```js
+const targetingKeys = { mi_lat: CD.param('mi_lat'), mi_lon: CD.param('mi_lon') };
+const rows = await source.getAllRows(targetingKeys)
+// assuming `mi_lat` and `mi_lon` were 40, -70 respectively
+// [
+//   { store_name: "The Gap Bryant Park", gap_latitude: 40, gap_longitude: -70 },
+//   { store_name: "The Gap Time Square", gap_latitude: 50, gap_longitude: -80 },
+//   { store_name: "The Gap Union Square", gap_latitude: 60, gap_longitude: -90 }
+// ]
+```
+
+You will get back by default the three closest locations sorted by distance. We also support the following params along with `mi_include_headers`:
+
+* `mi_limit`: by default this is `3`. You can pass an integer to specify how many locations you would like returned in the payload. The max is `20` and any values sent higher than that will default to `20`
+* `mi_radius`: by default this is not used. You can pass in an integer for `mi_radius` to further trim the results by distance (unit is miles).
+
+The first argument of `getAllRows` is typically a JS object. Internally that object is converted to URI query parameters and appended to the request on `sorcerer`. You can include any additional query parameters simply by including them into the object:
+
+```
+const rows = await source.getAllRows({ mi_lat: latitude, mi_lon: longitude, some_targeting_key: 'key', mi_limit: 5, mi_radius: 2 })
+```
+
+#### Priority
+
+When geolocating, if both targeting keys and geolocation columns are set, we will use the following priority to determine which parameters are used to retrieve rows:
+
+* IF both geolocation and targeting columns are set, AND the targeting conditions are fulfilled (read: required targeting keys are supplied)
+  * `sorcerer` will _only_ use targeting
+* IF both geolocation and targeting columns are set, AND the targeting conditions are not fulfilled
+  * `sorcerer` will fall back to geolocation
+* IF only geolocation columns are set, AND geolocation conditions are fulfilled (read: `mi_lat` and `mi_lon` are supplied)
+  * `sorcerer` will use geolocation
+* IF only targeting columns are set, AND targeting conditions are fulfilled
+  * `sorcerer` will use targeting
+
 ## Changelog
 
 ### 0.2.0
