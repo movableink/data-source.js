@@ -30,8 +30,6 @@ export default class DataSource {
     options['headers']['x-reverse-proxy-ttl'] = options['corsCacheTime'] / 1000;
     options['headers']['x-mi-cbe'] = CD._hashForRequest(url, options);
 
-    console.log(options);
-
     return CD.get(url, options, cb);
   }
 
