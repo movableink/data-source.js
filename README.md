@@ -31,7 +31,7 @@ const targetingKeys = {
 
 // optional header options to pass to sorcerer
 const options = {
-  corsCacheTime: 100000
+  cacheTime: 100000
 };
 
 const source = new DataSource(key);
@@ -52,7 +52,7 @@ const targetingKeys = { category: 'food' };
 
 // optional header options to pass to sorcerer
 const options = {
-  corsCacheTime: 100000
+  cacheTime: 100000
 };
 const rows = await source.getAllRows(targetingKeys, options);
 // [["food", "apple", "banana"], ["food", "cake", "rice"], ["food", "fish", "pasta"]]
@@ -93,7 +93,7 @@ const targetingKeys = { category: 'food' };
 // optional header options to pass to sorcerer
 const options = {
   headers: true,
-  corsCacheTime: 100000
+  cacheTime: 100000
 };
 const rows = await source.getAllRows(targetingKeys, options);
 // [
@@ -179,7 +179,7 @@ When geolocating, if both targeting keys and geolocation columns are set, we wil
 ### 0.2.1
 
 - Add additional `headers` support to `getRawData` & `getAllRows`
-  - Pass additional params such as `{ headers: true, corsCacheTime: 100000 }` as the 2nd argument which will increase the cache time
+  - Pass additional params such as `{ headers: true, cacheTime: 100000 }` as the 2nd argument which will increase the cache time
 
 ### 0.2.0
 
