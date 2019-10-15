@@ -7,7 +7,7 @@ Data Source is a JS library meant to help developers access Movable Ink Data Sou
 Add data sources to your package.json file. In `dependencies` include the following:
 
 ```
-"data-source.js": "https://github.com/movableink/data-source.js.git#v0.2.0"
+"data-source.js": "https://github.com/movableink/data-source.js.git#v0.2.1"
 ```
 
 ## Usage
