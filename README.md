@@ -152,8 +152,8 @@ Note: including `headers: true`, only for geolocation, will change the response 
 
 You will get back by default the three closest locations sorted by distance. We also support the following params:
 
-- `mi_limit`: by default this is `3`. You can pass an integer to specify how many locations you would like returned in the payload. The max is `20` and any values sent higher than that will default to `20`
-- `mi_radius`: by default this is not used. You can pass in an integer for `mi_radius` to further trim the results by distance (unit is miles).
+- `mi_limit`: if not passed, it will default to `3`. You can pass an integer to specify how many locations you would like returned in the payload. The max is `20` and any values sent higher than that will default to `20`
+- `mi_radius`: if not passed, it will default to `0`. A radius of 0 will _not_ filter any results down and will act like you did not pass a radius at all. You can pass in any other positive integer for `mi_radius` to further trim the results by distance (unit is miles).
 
 The first argument of `getAllRows` is typically a JS object. Internally that object is converted to URI query parameters and appended to the request on `sorcerer`. You can include any additional query parameters simply by including them into the object:
 
