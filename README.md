@@ -7,7 +7,7 @@ Data Source is a JS library meant to help developers access Movable Ink Data Sou
 Add data sources to your package.json file. In `dependencies` include the following:
 
 ```
-"data-source.js": "https://github.com/movableink/data-source.js.git#v0.2.1"
+"data-source.js": "https://github.com/movableink/data-source.js.git#v0.2.2"
 ```
 
 ## Usage
@@ -175,6 +175,10 @@ When geolocating, if both targeting keys and geolocation columns are set, we wil
   - `sorcerer` will use targeting
 
 ## Changelog
+
+### 0.2.2
+
+- Update TypeScript from `2.6.1` to `3.7.4`
 
 ### 0.2.1
 
