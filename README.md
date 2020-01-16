@@ -176,6 +176,10 @@ When geolocating, if both targeting keys and geolocation columns are set, we wil
 
 ## Changelog
 
+### 0.2.2
+
+- Update TypeScript from `2.6.1` to `3.7.4`
+
 ### 0.2.1
 
 - Add additional `headers` support to `getRawData` & `getAllRows`
