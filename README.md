@@ -239,7 +239,7 @@ const options = {
 };
 
 const source = new DataSource('some_key');
-const data = await source.getMultipleRows(options);
+const data = await source.getMultipleTargets(options);
 ```
 
 Which returns the following: 
