@@ -2,6 +2,34 @@
 
 Data Source is a JS library meant to help developers access Movable Ink Data Sources and the raw responses associated with that Data Source.
 
+## Table Of Contents
+
+- [Data Source JS](#data-source-js)
+  - [Table Of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Setup](#setup)
+    - [Fetching data](#fetching-data)
+    - [Multiple Row retrieval for CSV Data Sources](#multiple-row-retrieval-for-csv-data-sources)
+      - [Example](#example)
+    - [Including Headers](#including-headers)
+      - [Example](#example-1)
+    - [Geolocation](#geolocation)
+      - [Example](#example-2)
+      - [Priority](#priority)
+    - [Multiple target retrieval for CSV Data Sources](#multiple-target-retrieval-for-csv-data-sources)
+      - [Notes on multiple targets body:](#notes-on-multiple-targets-body)
+  - [Changelog](#changelog)
+    - [0.3.0](#030)
+    - [0.2.2](#022)
+    - [0.2.1](#021)
+    - [0.2.0](#020)
+    - [0.1.0](#010)
+    - [0.0.3](#003)
+    - [0.0.2](#002)
+    - [0.0.1](#001)
+
+
 ## Installation
 
 Add data sources to your package.json file. In `dependencies` include the following:
@@ -221,7 +249,7 @@ Which returns the following:
 ]
 ```
 
-#### Notes on body:
+#### Notes on multiple targets body:
 
 - you can pass up to 200 targeting sets in the array, everything after will be ignored
 - each set must include the value for each targeting column
@@ -246,8 +274,8 @@ Which returns the following:
 
     ```json
     [
-    	{"Level": "1", "Tier": "Silver"},
-    	{"Level": "3", "Tier": "Platinum"}
+      {"Level": "1", "Tier": "Silver"},
+      {"Level": "3", "Tier": "Platinum"}
     ]
     ```
 
@@ -255,8 +283,8 @@ Which returns the following:
 
     ```json
     [
-      {"Level": "3", "Tier": "Platinum"}
-    	{"Level": "1", "Tier": "Silver"}
+      {"Level": "3", "Tier": "Platinum"},
+      {"Level": "1", "Tier": "Silver"}
     ]
     ```
 
