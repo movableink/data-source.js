@@ -18,6 +18,7 @@ Data Source is a JS library meant to help developers access Movable Ink Data Sou
       - [Example](#example-2)
       - [Priority](#priority)
     - [Multiple target retrieval for CSV Data Sources](#multiple-target-retrieval-for-csv-data-sources)
+      - [Example](#example-3)
       - [Notes on multiple targets body:](#notes-on-multiple-targets-body)
   - [Changelog](#changelog)
     - [0.3.0](#030)
@@ -205,6 +206,8 @@ When geolocating, if both targeting keys and geolocation columns are set, we wil
 ### Multiple target retrieval for CSV Data Sources
 
 To fetch multiple targets from a CSV DataSource you can use the `getMultipleTargets` method, which will return you an array of objects based on the number of rows that match. 
+
+#### Example
 
 If our CSV file is like below:
 
