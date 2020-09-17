@@ -23,6 +23,6 @@
   },
   "dependencies": {
     "typescript": "3.7.4",
-    "cropduster": "~5.2.0"
+    "cropduster": "~7.1.0"
   }
 }
