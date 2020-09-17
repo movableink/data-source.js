@@ -83,37 +83,39 @@ QUnit.test("getAllRows supports a headers option", async function(assert) {
   dataSource.getRawData.restore();
 });
 
-QUnit.test('getMultipleRows JSON parses response and returns data', async function (
-  assert
-) {
-  const response = {
-    data: '[{"Level":"1","Tier":"Silver","Content":"Tom and Jerry"},{"Level":"2","Tier":"Gold","Content":"Peter Pan"},{"Level":"1","Tier":"Silver","Content":"Marry Poppins"}]'
-  };
+QUnit.test(
+  'getMultipleTargets JSON parses response and returns data',
+  async function (assert) {
+    const response = {
+      data:
+        '[{"Level":"1","Tier":"Silver","Content":"Tom and Jerry"},{"Level":"2","Tier":"Gold","Content":"Peter Pan"},{"Level":"1","Tier":"Silver","Content":"Marry Poppins"}]',
+    };
 
-  sinon.stub(CD, 'get').resolves(response);
+    sinon.stub(CD, 'get').resolves(response);
 
-  const dataSource = new DataSource('some_key');
-  const options = {
-    method: 'POST',
-    body: JSON.stringify([
-      {
-        Level: 1,
-        Tier: 'Silver',
-      },
-      {
-        Level: 2,
-        Tier: 'Gold',
-      },
-    ])
+    const dataSource = new DataSource('some_key');
+    const options = {
+      method: 'POST',
+      body: JSON.stringify([
+        {
+          Level: 1,
+          Tier: 'Silver',
+        },
+        {
+          Level: 2,
+          Tier: 'Gold',
+        },
+      ]),
+    };
+
+    const expectedRows = [
+      { Level: '1', Tier: 'Silver', Content: 'Tom and Jerry' },
+      { Level: '2', Tier: 'Gold', Content: 'Peter Pan' },
+      { Level: '1', Tier: 'Silver', Content: 'Marry Poppins' },
+    ];
+    const actualRows = await dataSource.getMultipleTargets(options);
+
+    assert.propEqual(actualRows, expectedRows);
+    CD.get.restore();
   }
-  
-  const expectedRows = [
-    { Level: '1', Tier: 'Silver', Content: 'Tom and Jerry' },
-    { Level: '2', Tier: 'Gold', Content: 'Peter Pan' },
-    { Level: '1', Tier: 'Silver', Content: 'Marry Poppins' },
-  ];
-  const actualRows = await dataSource.getMultipleRows(options);
-
-  assert.propEqual(actualRows, expectedRows);
-  CD.get.restore();
-});
+);

@@ -53,7 +53,7 @@ export default class DataSource {
    *
    * @param opts
    */
-  async getMultipleRows(opts: any = {}) {
+  async getMultipleTargets(opts: any = {}) {
     const params = {
       mi_multiple: true,
       mi_include_headers: true,
@@ -62,7 +62,7 @@ export default class DataSource {
     const { method = null } = opts;
 
     if (!method && method.toLowerCase() !== 'post') {
-      throw new Error('Request method must be POST for getMultipleRows');
+      throw new Error('Request method must be POST for getMultipleTargets');
     }
 
     const { data } = await this.getRawData(params, opts);
