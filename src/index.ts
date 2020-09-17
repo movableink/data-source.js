@@ -10,12 +10,12 @@ export default class DataSource {
       'https://sorcerer.movableink-templates.com/data_sources';
   }
 
-  getRawData(params: object, options = {}, cb?: Function) {
-    if (typeof options === 'function') {
-      cb = options;
-      options = {};
-    }
-
+  /**
+   *
+   * @param params
+   * @param options
+   */
+  async getRawData(params: object, options = {}) {
     const paramStr = Object.keys(params)
       .map((key) => {
         return key + '=' + params[key];
@@ -30,19 +30,42 @@ export default class DataSource {
     options['headers']['x-reverse-proxy-ttl'] = options['cacheTime'] / 1000;
     options['headers']['x-mi-cbe'] = CD._hashForRequest(url, options);
 
-    return CD.get(url, options, cb);
+    return await CD.get(url, options);
   }
 
-  getAllRows(params: object, opts = {}) {
+  /**
+   *
+   * @param params
+   * @param opts
+   */
+  async getAllRows(params: object, opts = {}) {
     params['mi_multiple'] = true;
 
     if (opts['headers']) {
       params['mi_include_headers'] = true;
       opts['headers'] = {};
     }
+    const { data } = await this.getRawData(params, opts);
+    return JSON.parse(data);
+  }
 
-    return this.getRawData(params, opts).then(function(response) {
-      return JSON.parse(response.data);
-    });
+  /**
+   *
+   * @param opts
+   */
+  async getMultipleTargets(opts: any = {}) {
+    const params = {
+      mi_multiple: true,
+      mi_include_headers: true,
+    };
+
+    const { method = null } = opts;
+
+    if (!method && method.toLowerCase() !== 'post') {
+      throw new Error('Request method must be POST for getMultipleTargets');
+    }
+
+    const { data } = await this.getRawData(params, opts);
+    return JSON.parse(data);
   }
 }

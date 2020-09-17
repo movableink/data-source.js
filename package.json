@@ -1,6 +1,6 @@
 {
   "name": "data-source.js",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "main": "./dist/index.js",
   "license": "MIT",
   "scripts": {
@@ -23,6 +23,6 @@
   },
   "dependencies": {
     "typescript": "3.7.4",
-    "cropduster": "~5.2.0"
+    "cropduster": "~7.1.0"
   }
 }

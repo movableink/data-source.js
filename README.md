@@ -2,12 +2,41 @@
 
 Data Source is a JS library meant to help developers access Movable Ink Data Sources and the raw responses associated with that Data Source.
 
+## Table Of Contents
+
+- [Data Source JS](#data-source-js)
+  - [Table Of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Setup](#setup)
+    - [Fetching data](#fetching-data)
+    - [Multiple Row retrieval for CSV Data Sources](#multiple-row-retrieval-for-csv-data-sources)
+      - [Example](#example)
+    - [Including Headers](#including-headers)
+      - [Example](#example-1)
+    - [Geolocation](#geolocation)
+      - [Example](#example-2)
+      - [Priority](#priority)
+    - [Multiple target retrieval for CSV Data Sources](#multiple-target-retrieval-for-csv-data-sources)
+      - [Example](#example-3)
+      - [Notes on multiple targets body:](#notes-on-multiple-targets-body)
+  - [Changelog](#changelog)
+    - [0.3.0](#030)
+    - [0.2.2](#022)
+    - [0.2.1](#021)
+    - [0.2.0](#020)
+    - [0.1.0](#010)
+    - [0.0.3](#003)
+    - [0.0.2](#002)
+    - [0.0.1](#001)
+
+
 ## Installation
 
 Add data sources to your package.json file. In `dependencies` include the following:
 
 ```
-"data-source.js": "https://github.com/movableink/data-source.js.git#v0.2.2"
+"data-source.js": "https://github.com/movableink/data-source.js.git#v0.3.0"
 ```
 
 ## Usage
@@ -174,7 +203,106 @@ When geolocating, if both targeting keys and geolocation columns are set, we wil
 - IF only targeting columns are set, AND targeting conditions are fulfilled
   - `sorcerer` will use targeting
 
+### Multiple target retrieval for CSV Data Sources
+
+To fetch multiple targets from a CSV DataSource you can use the `getMultipleTargets` method, which will return you an array of objects based on the number of rows that match. 
+
+#### Example
+
+If our CSV file is like below:
+
+Level | Tier | Content
+-- | -- | --
+1 | Silver | Marry Poppins
+2 | Gold | Peter Pan
+3 | Platinum | Robin Hood
+1 | Silver | Tom and Jerry
+5 | Gold | Aladdin
+1 | Gold | The Lion King
+1 |   | Cinderella
+
+You can make a request like this: 
+
+```js
+const options = {
+  method: 'POST', // method has to be POST
+  body: JSON.stringify([
+    {
+      Level: 1,
+      Tier: 'Silver',
+    },
+    {
+      Level: 2,
+      Tier: 'Gold',
+    },
+  ]),
+};
+
+const source = new DataSource('some_key');
+const data = await source.getMultipleTargets(options);
+```
+
+Which returns the following: 
+
+```js
+[
+  { Level: '1', Tier: 'Silver', Content: 'Tom and Jerry' },
+  { Level: '2', Tier: 'Gold', Content: 'Peter Pan' },
+  { Level: '1', Tier: 'Silver', Content: 'Marry Poppins' },
+]
+```
+
+#### Notes on multiple targets body:
+
+- you can pass up to 200 targeting sets in the array, everything after will be ignored
+- each set must include the value for each targeting column
+
+    if `Level` and `Tier` are targeting columns then the set needs to have both `Level` and `Tier` inside the set
+
+    like this:
+
+     `{ "Level": "value 1", "Tier": "value2"}`
+
+     If any targets are missing inside of the set then that key will have a empty string by default.
+
+- order within each targeting set doesn't matter
+
+    `{"Level": "1", "Tier": "Silver"}` 
+
+    is equivalent to
+
+    `{"Tier": "Silver", "Level": "1"}`
+
+- order between all targeting sets doesn't matter
+
+    ```json
+    [
+      {"Level": "1", "Tier": "Silver"},
+      {"Level": "3", "Tier": "Platinum"}
+    ]
+    ```
+
+    is equivalent to
+
+    ```json
+    [
+      {"Level": "3", "Tier": "Platinum"},
+      {"Level": "1", "Tier": "Silver"}
+    ]
+    ```
+
+- Every CSV row that matches *ANY* of the targeting sets will be returned
+
+    It's an `OR` between targeting sets and an `AND` for row values inside the set
+
+- CSV rows will always be returned in descending order (last CSV row comes back first)
+
 ## Changelog
+
+### 0.3.0
+
+- Add support for `POST` request to `sorcerer` which allows for targeting multiple segments in DataSource with the method `getMultipleTargets`
+- Update `CropDuster` to be `7.1.0`
 
 ### 0.2.2
 
