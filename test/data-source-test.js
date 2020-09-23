@@ -3,7 +3,7 @@ const { module, test } = QUnit;
 import DataSource from "../src/index";
 import CD from "cropduster";
 
-QUnit.test(
+test(
   "getRawData makes a get request through cropduster with query params",
   function(assert) {
     sinon.stub(CD, "get");
@@ -23,7 +23,7 @@ QUnit.test(
   }
 );
 
-QUnit.test("getAllRows passes mi_multiple param", async function(assert) {
+test("getAllRows passes mi_multiple param", async function(assert) {
   const dataSource = new DataSource("some_key");
   const data = { data: "[]" };
   sinon.stub(dataSource, "getRawData").resolves(data);
@@ -41,7 +41,7 @@ QUnit.test("getAllRows passes mi_multiple param", async function(assert) {
   dataSource.getRawData.restore();
 });
 
-QUnit.test("getAllRows JSON parses response and returns data", async function(
+test("getAllRows JSON parses response and returns data", async function(
   assert
 ) {
   const response = {
@@ -64,7 +64,7 @@ QUnit.test("getAllRows JSON parses response and returns data", async function(
   CD.get.restore();
 });
 
-QUnit.test("getAllRows supports a headers option", async function(assert) {
+test("getAllRows supports a headers option", async function(assert) {
   const dataSource = new DataSource("some_key");
   const data = { data: "[]" };
   sinon.stub(dataSource, "getRawData").resolves(data);
@@ -83,7 +83,7 @@ QUnit.test("getAllRows supports a headers option", async function(assert) {
   dataSource.getRawData.restore();
 });
 
-QUnit.test(
+test(
   'getMultipleTargets JSON parses response and returns data',
   async function (assert) {
     const response = {
@@ -94,28 +94,74 @@ QUnit.test(
     sinon.stub(CD, 'get').resolves(response);
 
     const dataSource = new DataSource('some_key');
-    const options = {
-      method: 'POST',
-      body: JSON.stringify([
-        {
-          Level: 1,
-          Tier: 'Silver',
-        },
-        {
-          Level: 2,
-          Tier: 'Gold',
-        },
-      ]),
-    };
 
     const expectedRows = [
       { Level: '1', Tier: 'Silver', Content: 'Tom and Jerry' },
       { Level: '2', Tier: 'Gold', Content: 'Peter Pan' },
       { Level: '1', Tier: 'Silver', Content: 'Marry Poppins' },
     ];
-    const actualRows = await dataSource.getMultipleTargets(options);
 
+    const sets = [ { Level: '1', Tier: 'Silver' }, { Level: '2', Tier: 'Gold' } ];
+    const actualRows = await dataSource.getMultipleTargets(sets);
     assert.propEqual(actualRows, expectedRows);
+
+    const requestMethod = CD.get.args[0][1]['method'];
+    assert.equal(requestMethod, 'POST');
+
+    const postBody = CD.get.args[0][1]['body'];
+    assert.equal(postBody, `[{"Level":"1","Tier":"Silver"},{"Level":"2","Tier":"Gold"}]`);
+
     CD.get.restore();
   }
 );
+
+test('getSingleTarget returns all rows for a single targeting set', async function(assert) {
+    const response = {
+      data:
+        '[{"Level":"1","Tier":"Silver","Content":"Tom and Jerry"},{"Level":"1","Tier":"Silver","Content":"Peter Pan"}]',
+    };
+
+    sinon.stub(CD, 'get').resolves(response);
+
+    const dataSource = new DataSource('some_key');
+
+    const expectedRows = [
+      { Level: '1', Tier: 'Silver', Content: 'Tom and Jerry' },
+      { Level: '1', Tier: 'Silver', Content: 'Peter Pan' },
+    ];
+        
+    const actualRows = await dataSource.getSingleTarget({ Level: '1', Tier: 'Silver' });
+    assert.propEqual(actualRows, expectedRows);
+
+    const requestMethod = CD.get.args[0][1]['method'];
+    assert.equal(requestMethod, 'POST');
+
+    const postBody = CD.get.args[0][1]['body'];
+    assert.equal(postBody, `[{"Level":"1","Tier":"Silver"}]`);
+
+    CD.get.restore();
+});
+
+test('getLocationTargets appends mi to internal query params and returns all geotargeting rows', async function(assert) {
+    const response = {
+      data:
+        '[{"latitude":"12.34","longitude":"-56.78","name":"Tom and Jerry"},{"latitude":"91.11","longitude":"-12.45","name":"Peter Pan"}]',
+    };
+
+    sinon.stub(CD, 'get').resolves(response);
+
+    const dataSource = new DataSource('some_key');
+
+    const expectedRows = [
+      { latitude: '12.34', longitude: '-56.78', name: 'Tom and Jerry' },
+      { latitude: '91.11', longitude: '-12.45', name: 'Peter Pan' },
+    ];
+        
+    const actualRows = await dataSource.getLocationTargets({ latitude: '12.66', longitude: '-56.90', storeKey: '123xyz' });
+    assert.propEqual(actualRows, expectedRows);
+
+    const sorcererUrl = CD.get.args[0][0];
+    assert.ok(sorcererUrl.includes('mi_multiple=true&mi_include_headers=true&mi_lat=12.66&mi_lon=-56.90&storeKey=123xyz'));
+
+    CD.get.restore();
+});
