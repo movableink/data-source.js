@@ -1,8 +1,13 @@
 {
-  "name": "data-source.js",
-  "version": "0.3.0",
+  "name": "@movable-internal/data-source.js",
+  "version": "0.4.0",
   "main": "./dist/index.js",
   "license": "MIT",
+  "files": [
+    "dist",
+    "src",
+    "tsconfig.json"
+  ],
   "scripts": {
     "build": "rollup -m -c --f iife --name DataSource -o out.js",
     "test": "karma start",
@@ -20,6 +25,9 @@
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-typescript": "^0.8.1",
     "sinon": "^4.1.2"
+  },
+  "publishConfig": {
+    "registry": "https://packagecloud.io/movableink/studio/npm"
   },
   "dependencies": {
     "typescript": "3.7.4",
