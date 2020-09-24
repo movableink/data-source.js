@@ -205,7 +205,7 @@ When geolocating, if both targeting keys and geolocation columns are set, we wil
 
 ### Multiple target retrieval for CSV Data Sources
 
-To fetch multiple targets from a CSV DataSource you can use the `getMultipleTargets` method, which will return you an array of objects based on the number of rows that match. 
+To fetch multiple targets from a CSV DataSource you can use the `getMultipleTargets` method, which will return you an array of objects based on the number of rows that match.
 
 #### Example
 
@@ -221,7 +221,7 @@ Level | Tier | Content
 1 | Gold | The Lion King
 1 |   | Cinderella
 
-You can make a request like this: 
+You can make a request like this:
 
 ```js
 const options = {
@@ -242,7 +242,7 @@ const source = new DataSource('some_key');
 const data = await source.getMultipleTargets(options);
 ```
 
-Which returns the following: 
+Which returns the following:
 
 ```js
 [
@@ -267,7 +267,7 @@ Which returns the following:
 
 - order within each targeting set doesn't matter
 
-    `{"Level": "1", "Tier": "Silver"}` 
+    `{"Level": "1", "Tier": "Silver"}`
 
     is equivalent to
 
@@ -296,6 +296,110 @@ Which returns the following:
     It's an `OR` between targeting sets and an `AND` for row values inside the set
 
 - CSV rows will always be returned in descending order (last CSV row comes back first)
+
+### Additional methods:
+##### _getSingleTarget(set, options)_
+***Input:***
+set (object with targeting params)
+options (this is optional in case you want to override existing headers or add new ones)
+***Return value:*** an array of rows matching the set
+
+```js
+const set = { Level: 1, Tier: 'Silver' }
+
+const source = new DataSource('some_key');
+const data = await source.getSingleTarget(set);
+```
+
+##### _getLocationTarget(params, options)_
+***Input:***
+params (object with query params)
+- latitude & longitude --- will be used if targeting params are not provided
+- includeHeaders --- passed by default
+- multiple --- passed by default
+- radius --- for filtering rows within a specific radius, default is 0
+- limit --- for limiting the number of rows returned
+- You can inlcude targeting params within the params object
+
+options (this is optional in case you want to override existing headers or add new ones)
+***Return value:*** object with `values` and `_meta` properties.
+
+
+```js
+const params = { latitude: '34.80319', longitude: '-92.25379' };
+const source = new DataSource('some_key');
+const data = await source.getLocationTarget(params);
+/*returned data now contains something like this
+{
+    "values": [
+        {
+            "latitude": "34.80319",
+            "longitude": "-92.25379",
+            "key": "3",
+            "name": "New York",
+        },
+        {
+            "latitude": "34.782548",
+            "longitude": "-92.217848",
+            "key": "7",
+            "name": "London",
+        },
+        {
+            "latitude": "34.832243",
+            "longitude": "-92.195878",
+            "key": "6",
+            "name": "Paris",
+        }
+    ],
+    "_meta": {
+        "geo_columns": {
+            "latitude": "latitude",
+            "longitude": "longitude"
+        }
+    }
+}
+*/
+```
+You can pass targeting param(s) and get back a specific row.
+Assuming `key` is the targeting column in  our geolocated CSV.
+```js
+//since we're passing a targeting param [key: '3'], latitude and longitude will be ignored
+const params = { latitude: '34.80319', longitude: '-92.25379', key: '3' };
+const source = new DataSource('some_key');
+const data = await source.getLocationTarget(params);
+/*returned data now contains a single row matching the targeting param
+{
+    "values": [
+        {
+            "latitude": "34.80319",
+            "longitude": "-92.25379",
+            "key": "3",
+            "name": "New York",
+        }
+    ],
+    "_meta": {
+        "geo_columns": {
+            "latitude": "latitude",
+            "longitude": "longitude"
+        }
+    }
+}
+*/
+```
+
+## Publishing package:
+If this is your first time publishing to Package Cloud, you may need to configure your npm to use it. Run:
+```
+$ npm login --scope=@movable-internal --registry=https://packagecloud.io/movableink/studio/npm/
+```
+To install dependecies and build dist directory, cd into data-source.js and run:
+```
+$ yarn install
+```
+Then to publish the package to packagecloud run:
+```
+$ npm publish
+```
 
 ## Changelog
 

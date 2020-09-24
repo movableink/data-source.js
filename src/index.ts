@@ -14,7 +14,8 @@ export default class DataSource {
       longitude: 'mi_lon',
       includeHeaders: 'mi_include_headers',
       multiple: 'mi_multiple',
-      radius: 'mi_radius'
+      radius: 'mi_radius',
+      limit: 'mi_limit'
     };
   }
 
