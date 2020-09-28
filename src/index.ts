@@ -62,25 +62,18 @@ export default class DataSource {
    *
    * @param opts
    */
-  async getMultipleTargets(sets: any = [], opts: any = {}) {
+  async getMultipleTargets(opts: any = {}) {
     const params = {
       mi_multiple: true,
       mi_include_headers: true,
     };
 
-    const options = {
-      method: 'POST',
-      body: JSON.stringify(sets)
-    }
-
-    Object.assign(options, opts);
-
-    const { method = null } = options;
+    const { method = null } = opts;
     if (!method && method.toLowerCase() !== 'post') {
       throw new Error('Request method must be POST for getMultipleTargets');
     }
 
-    const { data } = await this.getRawData(params, options);
+    const { data } = await this.getRawData(params, opts);
     return JSON.parse(data);
   }
 
@@ -89,8 +82,8 @@ export default class DataSource {
    * @param set
    * @param opts
    */
-  async getSingleTarget(set: any = {}, opts: any = {}) {
-    return await this.getMultipleTargets([set], opts);
+  async getSingleTarget(opts: any = {}) {
+    return await this.getMultipleTargets(opts);
   }
 
   /**

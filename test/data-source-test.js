@@ -102,7 +102,11 @@ test(
     ];
 
     const sets = [ { Level: '1', Tier: 'Silver' }, { Level: '2', Tier: 'Gold' } ];
-    const actualRows = await dataSource.getMultipleTargets(sets);
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(sets)
+    }
+    const actualRows = await dataSource.getMultipleTargets(options);
     assert.propEqual(actualRows, expectedRows);
 
     const requestMethod = CD.get.args[0][1]['method'];
@@ -130,7 +134,12 @@ test('getSingleTarget returns all rows for a single targeting set', async functi
       { Level: '1', Tier: 'Silver', Content: 'Peter Pan' },
     ];
         
-    const actualRows = await dataSource.getSingleTarget({ Level: '1', Tier: 'Silver' });
+    const targetingSet = [{ Level: '1', Tier: 'Silver' }];
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(targetingSet)
+    }
+    const actualRows = await dataSource.getSingleTarget(options);
     assert.propEqual(actualRows, expectedRows);
 
     const requestMethod = CD.get.args[0][1]['method'];
