@@ -44,22 +44,6 @@ export default class DataSource {
 
   /**
    *
-   * @param params
-   * @param opts
-   */
-  async getAllRows(params: object, opts = {}) {
-    params['mi_multiple'] = true;
-
-    if (opts['headers']) {
-      params['mi_include_headers'] = true;
-      opts['headers'] = {};
-    }
-    const { data } = await this.getRawData(params, opts);
-    return JSON.parse(data);
-  }
-
-  /**
-   *
    * @param opts
    */
   async getMultipleTargets(opts: any = {}) {
