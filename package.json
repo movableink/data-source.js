@@ -12,7 +12,6 @@
   "scripts": {
     "build": "rollup -c",
     "test": "tsc && karma start --single-run",
-    "postinstall": "yarn build",
     "prepublishOnly": "yarn build"
   },
   "devDependencies": {
