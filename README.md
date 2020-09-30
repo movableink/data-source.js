@@ -288,6 +288,7 @@ ___
 - Remove `getAllRows()` method
 - Refactor existing methods
 - Make this package avalable on packagecloud
+- Replace built-in ts compiler with ts compiler in babel
 
 ### 0.3.0
 
