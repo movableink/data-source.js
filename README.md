@@ -10,17 +10,17 @@ Data Source is a JS library meant to help developers access Movable Ink Data Sou
   - [Usage](#usage)
     - [Setup](#setup)
     - [Fetching data](#fetching-data)
-    - [Multiple Row retrieval for CSV Data Sources](#multiple-row-retrieval-for-csv-data-sources)
+    - [Multiple target retrieval for CSV Data Sources](#multiple-target-retrieval-for-csv-data-sources)
       - [Example](#example)
-    - [Including Headers](#including-headers)
-      - [Example](#example-1)
-    - [Geolocation](#geolocation)
-      - [Example](#example-2)
-      - [Priority](#priority)
-    - [Multiple target retrieval for CSV Data Sources](#multiple-target-retrieval-for-csvdata-sources)
-      - [Example](#example-3)
       - [Notes on multiple targets body:](#notes-on-multiple-targets-body)
+    - [Single target retrieval for CSV Data Sources](#single-target-retrieval-for-csv-data-sources)
+      - [Example](#example-1)
+    - [Get rows based on geo-location](#get-rows-based-on-geo-location)
+      - [Example](#example-2)
+      - [Details on how Sorcerer determines priority](#details-on-how-sorcerer-determines-priority)
+  - [Publishing package:](#publishing-package)
   - [Changelog](#changelog)
+    - [1.0.0](#100)
     - [0.3.0](#030)
     - [0.2.2](#022)
     - [0.2.1](#021)
@@ -29,7 +29,6 @@ Data Source is a JS library meant to help developers access Movable Ink Data Sou
     - [0.0.3](#003)
     - [0.0.2](#002)
     - [0.0.1](#001)
-
 
 ## Installation
 
@@ -55,12 +54,12 @@ import DataSource from '@movable-internal/data-source.js';
 const key = 'unique_datasource_key'; // pulled from the data sources application
 const targetingKeys = {
   targeting_1: CD.param('targeting_1'),
-  targeting_2: CD.param('targeting_2')
+  targeting_2: CD.param('targeting_2'),
 }; // optional params that will get passed to sorcerer
 
 // optional header options to pass to sorcerer
 const options = {
-  cacheTime: 100000
+  cacheTime: 100000,
 };
 
 const source = new DataSource(key);
@@ -80,15 +79,15 @@ To fetch multiple targets from a CSV DataSource you can use the `getMultipleTarg
 
 If our CSV file is like below:
 
-Level | Tier | Content
--- | -- | --
-1 | Silver | Marry Poppins
-2 | Gold | Peter Pan
-3 | Platinum | Robin Hood
-1 | Silver | Tom and Jerry
-5 | Gold | Aladdin
-1 | Gold | The Lion King
-1 |   | Cinderella
+| Level | Tier     | Content       |
+| ----- | -------- | ------------- |
+| 1     | Silver   | Marry Poppins |
+| 2     | Gold     | Peter Pan     |
+| 3     | Platinum | Robin Hood    |
+| 1     | Silver   | Tom and Jerry |
+| 5     | Gold     | Aladdin       |
+| 1     | Gold     | The Lion King |
+| 1     |          | Cinderella    |
 
 You can make a request like this:
 
@@ -118,7 +117,7 @@ Which returns the following:
   { Level: '1', Tier: 'Silver', Content: 'Tom and Jerry' },
   { Level: '2', Tier: 'Gold', Content: 'Peter Pan' },
   { Level: '1', Tier: 'Silver', Content: 'Marry Poppins' },
-]
+];
 ```
 
 #### Notes on multiple targets body:
@@ -126,65 +125,79 @@ Which returns the following:
 - you can pass up to 200 targeting sets in the array, everything after will be ignored
 - each set must include the value for each targeting column
 
-    if `Level` and `Tier` are targeting columns then the set needs to have both `Level` and `Tier` inside the set
+  if `Level` and `Tier` are targeting columns then the set needs to have both `Level` and `Tier` inside the set
 
-    like this:
+  like this:
 
-     `{ "Level": "value 1", "Tier": "value2"}`
+  `{ "Level": "value 1", "Tier": "value2"}`
 
-     If any targets are missing inside of the set then that key will have a empty string by default.
+  If any targets are missing inside of the set then that key will have a empty string by default.
 
 - order within each targeting set doesn't matter
 
-    `{"Level": "1", "Tier": "Silver"}`
+  `{"Level": "1", "Tier": "Silver"}`
 
-    is equivalent to
+  is equivalent to
 
-    `{"Tier": "Silver", "Level": "1"}`
+  `{"Tier": "Silver", "Level": "1"}`
 
 - order between all targeting sets doesn't matter
 
-    ```json
-    [
-      {"Level": "1", "Tier": "Silver"},
-      {"Level": "3", "Tier": "Platinum"}
-    ]
-    ```
+  ```json
+  [
+    { "Level": "1", "Tier": "Silver" },
+    { "Level": "3", "Tier": "Platinum" }
+  ]
+  ```
 
-    is equivalent to
+  is equivalent to
 
-    ```json
-    [
-      {"Level": "3", "Tier": "Platinum"},
-      {"Level": "1", "Tier": "Silver"}
-    ]
-    ```
+  ```json
+  [
+    { "Level": "3", "Tier": "Platinum" },
+    { "Level": "1", "Tier": "Silver" }
+  ]
+  ```
 
-- Every CSV row that matches *ANY* of the targeting sets will be returned
+- Every CSV row that matches _ANY_ of the targeting sets will be returned
 
-    It's an `OR` between targeting sets and an `AND` for row values inside the set
+  It's an `OR` between targeting sets and an `AND` for row values inside the set
 
 - CSV rows will always be returned in descending order (last CSV row comes back first)
 
-### Additional methods:
-##### _getSingleTarget(set, options)_
-***Input:***
-set (object with targeting params)
+### Single target retrieval for CSV Data Sources
+
+**_Input:_**
 options (this is optional in case you want to override existing headers or add new ones)
-***Return value:*** an array of rows matching the set
+**_Return value:_** an array of rows matching the set
+
+#### Example
 
 ```js
-const set = { Level: 1, Tier: 'Silver' }
+const options = {
+  method: 'POST', // method has to be POST
+  body: JSON.stringify([
+    {
+      Level: 1,
+      Tier: 'Silver',
+    },
+  ]),
+};
 
 const source = new DataSource('some_key');
-const data = await source.getSingleTarget(set);
+const data = await source.getSingleTarget(options);
 ```
-___
-##### _getLocationTarget(params, options)_
+
+---
+
+### Get rows based on geo-location
+
 Using this method you can retrieve rows through our GIS capabilities by providing latitude and longitude coordinates while using `getLocationTarget`.
 
-***Input:***
-params (object with query params)
+**_Input:_**
+
+**params (object with query params)**
+
 - latitude & longitude --- will be used if targeting params are not provided
 - includeHeaders --- passed by default
 - multiple --- passed by default
@@ -192,12 +205,22 @@ params (object with query params)
 - limit --- if not passed, it will default to `3`. You can pass an integer to specify how many locations you would like returned in the payload. The max is `20` and any values sent higher than that will default to `20`
 - You can inlcude targeting params within the params object
 
-options (this is optional in case you want to override existing headers or add new ones)
-***Return value:*** object with `values` and `_meta` properties.
-(*You will get back by default the three closest locations sorted by distance.*)
+**options** (this is optional in case you want to override existing headers or add new ones i.e `cacheTime`)
+
+**_Return value:_**
+
+object with `values` and `_meta` properties.
+(_You will get back by default the three closest locations sorted by distance._)
+
+#### Example
 
 ```js
-const params = { latitude: '34.80319', longitude: '-92.25379' };
+const params = {
+  latitude: '34.80319',
+  longitude: '-92.25379',
+  radius: 20,
+};
+
 const source = new DataSource('some_key');
 const data = await source.getLocationTarget(params);
 /*returned data now contains something like this
@@ -231,8 +254,10 @@ const data = await source.getLocationTarget(params);
 }
 */
 ```
+
 You can pass targeting param(s) and get back a specific row.
-Assuming `key` is the targeting column in  our geolocated CSV.
+Assuming `key` is the targeting column in our geolocated CSV.
+
 ```js
 //since we're passing a targeting param [key: '3'], latitude and longitude will be ignored
 const params = { latitude: '34.80319', longitude: '-92.25379', key: '3' };
@@ -257,8 +282,11 @@ const data = await source.getLocationTarget(params);
 }
 */
 ```
+
 #### Details on how Sorcerer determines priority
+
 When geolocating, if both targeting keys and geolocation columns are set, we will use the following priority to determine which parameters are used to retrieve rows:
+
 - IF both geolocation and targeting columns are set, AND the targeting conditions are fulfilled (read: required targeting keys are supplied)
   - `sorcerer` will _only_ use targeting
 - IF both geolocation and targeting columns are set, AND the targeting conditions are not fulfilled
@@ -267,22 +295,33 @@ When geolocating, if both targeting keys and geolocation columns are set, we wil
   - `sorcerer` will use geolocation
 - IF only targeting columns are set, AND targeting conditions are fulfilled
   - `sorcerer` will use targeting
-___
+
+---
+
 ## Publishing package:
+
 If this is your first time publishing to Package Cloud, you may need to configure your npm to use it. Run:
+
 ```
 $ npm login --scope=@movable-internal --registry=https://packagecloud.io/movableink/studio/npm/
 ```
+
 To install dependecies and build dist directory, cd into data-source.js and run:
+
 ```
 $ yarn install
 ```
+
 Then to publish the package to packagecloud run:
+
 ```
 $ npm publish
 ```
-___
+
+---
+
 ## Changelog
+
 ### 1.0.0
 
 - Remove `getAllRows()` method
