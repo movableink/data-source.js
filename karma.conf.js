@@ -5,7 +5,7 @@ const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const babelConf = require('./babel-config');
 
-module.exports = function kamraConfig(config) {
+module.exports = function karmaConfig(config) {
   config.set({
     browsers: ['ChromeWithConfiguration'],
     frameworks: ['qunit', 'sinon'],
