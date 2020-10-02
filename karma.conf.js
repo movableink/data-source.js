@@ -1,63 +1,52 @@
-// Karma configuration
-// Generated on Tue Nov 21 2017 17:02:58 GMT-0500 (EST)
+const isDocker = require('is-docker');
+const watchMode = process.env.KARMA_WATCH === 'true' || true;
+const babel = require('rollup-plugin-babel');
+const resolve = require('rollup-plugin-node-resolve');
+const commonjs = require('@rollup/plugin-commonjs');
+const babelConf = require('./babel-config');
 
-module.exports = function(config) {
+module.exports = function karmaConfig(config) {
   config.set({
-    // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
-    // frameworks to use
-    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+    browsers: ['ChromeWithConfiguration'],
     frameworks: ['qunit', 'sinon'],
-    plugins: [
-      'karma-qunit',
-      'karma-chrome-launcher',
-      'karma-rollup-preprocessor',
-      'karma-sinon'
-    ],
-    // list of files / patterns to load in the browser
     files: [
-      { pattern: 'test/*.js', watched: false },
-      'src/*.ts'
+      'test/*.js',
     ],
-    // list of files to exclude
-    exclude: [
-    ],
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+    crossOriginAttribute: false,
+    customLaunchers: {
+      ChromeWithConfiguration: {
+        base: 'ChromeHeadless',
+        flags: isDocker() ? ['--no-sandbox'] : []
+      }
+    },
     preprocessors: {
-      'test/*.js': ['rollup'],
-      'src/**/*.ts': ['rollup']
+      'test/*.js': ['rollup']
     },
     rollupPreprocessor: {
+      input: 'test/data-source-test.js',
+      context: 'window',
       plugins: [
-        require('rollup-plugin-node-resolve')(),
-        require('rollup-plugin-typescript')()
+        babel(babelConf),
+        resolve({
+          extensions: ['.mjs', '.js', '.ts']
+        }),
+        commonjs()
       ],
-      format: 'iife',
-      name: 'DataSource',
-      sourcemap: 'inline'
+      output: {
+        format: 'iife',
+        name: 'dataSourceJSTests',
+        sourcemap: 'inline'
+      }
     },
-    // test results reporter to use
-    // possible values: 'dots', 'progress'
-    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['dots'],
-    // web server port
-    port: 9876,
-    // enable / disable colors in the output (reporters and logs)
-    colors: true,
-    // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
-    // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: false,
-    // start these browsers
-    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['ChromeHeadless'],
-    // Continuous Integration mode
-    // if true, Karma captures browsers, runs the tests and exits
-    singleRun: true,
-    // Concurrency level
-    // how many browser should be started simultaneous
-    concurrency: Infinity
-  })
-}
+    autoWatch: watchMode,
+    singleRun: !watchMode,
+    client: {
+      clearContext: false,
+      captureConsole: false,
+      qunit: {
+        showUI: true,
+        testTimeout: 60000
+      }
+    }
+  });
+};

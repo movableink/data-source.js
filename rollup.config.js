@@ -1,11 +1,28 @@
-import typescript from 'rollup-plugin-typescript';
-import resolve from 'rollup-plugin-node-resolve';
+const babel = require('rollup-plugin-babel');
+const resolve = require('rollup-plugin-node-resolve');
+const commonjs = require('@rollup/plugin-commonjs');
+const babelConf = require('./babel-config');
+const pkg = require('./package.json');
 
-export default {
-  entry: './src/index.ts',
+module.exports = {
+  input: './src/index.ts',
+  output: [
+    {
+      file: pkg.main,
+      exports: 'named',
+      format: 'cjs'
+    },
+    {
+      file: pkg.module,
+      format: 'es'
+    }
+  ],
 
   plugins: [
-    resolve(),
-    typescript()
+    babel(babelConf),
+    resolve({
+      extensions: ['.mjs', '.js', '.ts']
+    }),
+    commonjs()
   ]
 }

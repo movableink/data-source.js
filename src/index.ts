@@ -3,11 +3,20 @@ import CD from 'cropduster';
 export default class DataSource {
   key: string;
   sorcererUrlBase: string;
+  miParams: Object;
 
   constructor(key: string) {
     this.key = key;
     this.sorcererUrlBase =
       'https://sorcerer.movableink-templates.com/data_sources';
+    this.miParams = {
+      latitude: 'mi_lat',
+      longitude: 'mi_lon',
+      includeHeaders: 'mi_include_headers',
+      multiple: 'mi_multiple',
+      radius: 'mi_radius',
+      limit: 'mi_limit'
+    };
   }
 
   /**
@@ -35,22 +44,6 @@ export default class DataSource {
 
   /**
    *
-   * @param params
-   * @param opts
-   */
-  async getAllRows(params: object, opts = {}) {
-    params['mi_multiple'] = true;
-
-    if (opts['headers']) {
-      params['mi_include_headers'] = true;
-      opts['headers'] = {};
-    }
-    const { data } = await this.getRawData(params, opts);
-    return JSON.parse(data);
-  }
-
-  /**
-   *
    * @param opts
    */
   async getMultipleTargets(opts: any = {}) {
@@ -60,7 +53,6 @@ export default class DataSource {
     };
 
     const { method = null } = opts;
-
     if (!method && method.toLowerCase() !== 'post') {
       throw new Error('Request method must be POST for getMultipleTargets');
     }
@@ -68,4 +60,38 @@ export default class DataSource {
     const { data } = await this.getRawData(params, opts);
     return JSON.parse(data);
   }
+
+  /**
+   *
+   * @param set
+   * @param opts
+   */
+  async getSingleTarget(opts: any = {}) {
+    return await this.getMultipleTargets(opts);
+  }
+
+  /**
+   *
+   * @param params
+   * @param opts
+   */
+  async getLocationTargets(params: any = {}, opts: any = {}) {
+    const queryParams = {
+      mi_multiple: true,
+      mi_include_headers: true,
+    };
+
+    for (const key in params) {
+      const paramName = this.miParams[key];
+      if (paramName) {
+        queryParams[paramName] = params[key];
+      } else {
+        queryParams[key] = params[key];
+      }
+    }
+
+    const { data } = await this.getRawData(queryParams, opts);
+    return JSON.parse(data);
+  }
+
 }

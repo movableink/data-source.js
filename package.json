@@ -1,25 +1,44 @@
 {
-  "name": "data-source.js",
-  "version": "0.3.0",
+  "name": "@movable-internal/data-source.js",
+  "version": "1.0.0",
   "main": "./dist/index.js",
+  "module": "./dist/index.es.js",
   "license": "MIT",
+  "files": [
+    "dist",
+    "src",
+    "tsconfig.json"
+  ],
   "scripts": {
-    "build": "rollup -m -c --f iife --name DataSource -o out.js",
-    "test": "karma start",
-    "postinstall": "tsc -p ./",
-    "prepublishOnly": "tsc -p ./"
+    "build": "rollup -c",
+    "test": "tsc && karma start --single-run",
+    "prepublishOnly": "yarn build"
   },
   "devDependencies": {
-    "karma": "^1.7.1",
-    "karma-chrome-launcher": "^2.2.0",
-    "karma-qunit": "^1.2.1",
-    "karma-rollup-preprocessor": "^5.0.2",
+    "@babel/core": "^7.7.5",
+    "@babel/plugin-external-helpers": "^7.7.4",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-transform-runtime": "^7.7.6",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-typescript": "^7.3.3",
+    "@babel/runtime-corejs2": "^7.5.4",
+    "@rollup/plugin-commonjs": "^15.1.0",
+    "is-docker": "^2.0.0",
+    "karma": "^5.1.1",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-qunit": "^4.0.0",
+    "karma-rollup-preprocessor": "^7.0.2",
     "karma-sinon": "^1.0.5",
-    "qunitjs": "^2.4.1",
-    "rollup": "^0.51.5",
+    "qunit": "^2.9.3",
+    "rollup": "^2.3.2",
+    "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-peer-deps-external": "^2.0.0",
     "rollup-plugin-typescript": "^0.8.1",
     "sinon": "^4.1.2"
+  },
+  "publishConfig": {
+    "registry": "https://packagecloud.io/movableink/studio/npm"
   },
   "dependencies": {
     "typescript": "3.7.4",
