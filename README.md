@@ -71,6 +71,29 @@ const { data } = await source.getRawData(targetingKeys, options);
 The `key` above is supposed to be a unique identifier that refers to the data source that you are trying to receive raw
 data from. You can find this key in the Movable Ink platform.
 
+#### Example:
+
+If the API DS is set up with the following URL
+
+`https://product-api.com/product/[productID]/[variationID]`
+
+Then we would do something like so
+
+```
+const dsKey = 'DATA_SOURCE_KEY'
+const targetingKeys = {
+  productID = 123,
+  variationID = abc
+};
+
+const source = new DataSource(dsKey);
+const { data } = await source.getRawData(targetingKeys);
+```
+
+Which will replace the tokens in the call and effectively the call will be
+
+`https://product-api.com/product/123/abc`
+
 ### Multiple target retrieval for CSV Data Sources
 
 To fetch multiple targets from a CSV DataSource you can use the `getMultipleTargets` method, which will return you an array of objects based on the number of rows that match.
