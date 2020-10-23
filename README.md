@@ -48,7 +48,7 @@ The client is meant to be ran in a browser-like environment. The package itself 
 import DataSource from '@movable-internal/data-source.js';
 ```
 
-### Fetching data
+### Fetching data for API and Website Data Sources
 
 ```javascript
 const key = 'unique_datasource_key'; // pulled from the data sources application
