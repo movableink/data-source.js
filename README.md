@@ -32,7 +32,14 @@ Data Source is a JS library meant to help developers access Movable Ink Data Sou
 
 ## Installation
 
-Add data sources to your package.json file. In `dependencies` include the following:
+There are two ways to install the package to your project.
+You can run the following command in your terminal
+
+```
+yarn add @movable-internal/data-source.js
+```
+
+Or add it directly to your package.json file. In `dependencies` include the following:
 
 ```
 "@movable-internal/data-source.js": "1.0.0"
