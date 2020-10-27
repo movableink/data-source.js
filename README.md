@@ -32,7 +32,14 @@ Data Source is a JS library meant to help developers access Movable Ink Data Sou
 
 ## Installation
 
-Add data sources to your package.json file. In `dependencies` include the following:
+There are two ways to install the package to your project.
+You can run the following command in your terminal
+
+```
+yarn add @movable-internal/data-source.js
+```
+
+Or add it directly to your package.json file. In `dependencies` include the following:
 
 ```
 "@movable-internal/data-source.js": "1.0.0"
@@ -48,7 +55,7 @@ The client is meant to be ran in a browser-like environment. The package itself 
 import DataSource from '@movable-internal/data-source.js';
 ```
 
-### Fetching data
+### Fetching data for API and Website Data Sources
 
 ```javascript
 const key = 'unique_datasource_key'; // pulled from the data sources application
@@ -70,6 +77,29 @@ const { data } = await source.getRawData(targetingKeys, options);
 
 The `key` above is supposed to be a unique identifier that refers to the data source that you are trying to receive raw
 data from. You can find this key in the Movable Ink platform.
+
+#### Example:
+
+If the API DS is set up with the following URL
+
+`https://product-api.com/product/[productID]/[variationID]`
+
+Then we would do something like so
+
+```
+const dsKey = 'DATA_SOURCE_KEY'
+const targetingKeys = {
+  productID = 123,
+  variationID = abc
+};
+
+const source = new DataSource(dsKey);
+const { data } = await source.getRawData(targetingKeys);
+```
+
+Which will replace the tokens in the call and effectively the call will be
+
+`https://product-api.com/product/123/abc`
 
 ### Multiple target retrieval for CSV Data Sources
 
