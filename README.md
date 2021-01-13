@@ -222,7 +222,7 @@ const data = await source.getSingleTarget(options);
 
 ### Get rows based on geo-location
 
-Using this method you can retrieve rows through our GIS capabilities by providing latitude and longitude coordinates while using `getLocationTarget`.
+Using this method you can retrieve rows through our GIS capabilities by providing latitude and longitude coordinates while using `getLocationTargets`.
 
 **_Input:_**
 
@@ -252,7 +252,7 @@ const params = {
 };
 
 const source = new DataSource('some_key');
-const data = await source.getLocationTarget(params);
+const data = await source.getLocationTargets(params);
 /*returned data now contains something like this
 {
     "values": [
@@ -292,7 +292,7 @@ Assuming `key` is the targeting column in our geolocated CSV.
 //since we're passing a targeting param [key: '3'], latitude and longitude will be ignored
 const params = { latitude: '34.80319', longitude: '-92.25379', key: '3' };
 const source = new DataSource('some_key');
-const data = await source.getLocationTarget(params);
+const data = await source.getLocationTargets(params);
 /*returned data now contains a single row matching the targeting param
 {
     "values": [
