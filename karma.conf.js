@@ -9,18 +9,16 @@ module.exports = function karmaConfig(config) {
   config.set({
     browsers: ['ChromeWithConfiguration'],
     frameworks: ['qunit', 'sinon'],
-    files: [
-      'test/*.js',
-    ],
+    files: ['test/*.js'],
     crossOriginAttribute: false,
     customLaunchers: {
       ChromeWithConfiguration: {
         base: 'ChromeHeadless',
-        flags: isDocker() ? ['--no-sandbox'] : []
-      }
+        flags: isDocker() ? ['--no-sandbox'] : [],
+      },
     },
     preprocessors: {
-      'test/*.js': ['rollup']
+      'test/*.js': ['rollup'],
     },
     rollupPreprocessor: {
       input: 'test/data-source-test.js',
@@ -28,15 +26,15 @@ module.exports = function karmaConfig(config) {
       plugins: [
         babel(babelConf),
         resolve({
-          extensions: ['.mjs', '.js', '.ts']
+          extensions: ['.mjs', '.js', '.ts'],
         }),
-        commonjs()
+        commonjs(),
       ],
       output: {
         format: 'iife',
         name: 'dataSourceJSTests',
-        sourcemap: 'inline'
-      }
+        sourcemap: 'inline',
+      },
     },
     autoWatch: watchMode,
     singleRun: !watchMode,
@@ -45,8 +43,8 @@ module.exports = function karmaConfig(config) {
       captureConsole: false,
       qunit: {
         showUI: true,
-        testTimeout: 60000
-      }
-    }
+        testTimeout: 60000,
+      },
+    },
   });
 };
