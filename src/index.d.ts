@@ -1,3 +1,7 @@
+import { CDResponse } from '../types/cropduster';
+export interface TargetingParams {
+    [key: string]: string | number | Object[] | Object;
+}
 export default class DataSource {
     key: string;
     sorcererUrlBase: string;
@@ -8,7 +12,7 @@ export default class DataSource {
      * @param params
      * @param options
      */
-    getRawData(params: object, options?: {}): Promise<any>;
+    getRawData(params: TargetingParams, options?: {}): Promise<CDResponse>;
     /**
      *
      * @param opts

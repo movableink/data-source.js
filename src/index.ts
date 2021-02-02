@@ -1,4 +1,9 @@
 import CD from 'cropduster';
+import { CDResponse } from '../types/cropduster';
+
+export interface TargetingParams {
+  [key: string]: string | number | Object[] | Object;
+}
 
 export default class DataSource {
   key: string;
@@ -7,15 +12,14 @@ export default class DataSource {
 
   constructor(key: string) {
     this.key = key;
-    this.sorcererUrlBase =
-      'https://sorcerer.movableink-templates.com/data_sources';
+    this.sorcererUrlBase = 'https://sorcerer.movableink-templates.com/data_sources';
     this.miParams = {
       latitude: 'mi_lat',
       longitude: 'mi_lon',
       includeHeaders: 'mi_include_headers',
       multiple: 'mi_multiple',
       radius: 'mi_radius',
-      limit: 'mi_limit'
+      limit: 'mi_limit',
     };
   }
 
@@ -24,10 +28,11 @@ export default class DataSource {
    * @param params
    * @param options
    */
-  async getRawData(params: object, options = {}) {
+  getRawData(params: TargetingParams, options = {}): Promise<CDResponse> {
     const paramStr = Object.keys(params)
       .map((key) => {
-        return key + '=' + params[key];
+        const value = typeof params[key] === 'object' ? JSON.stringify(params[key]) : params[key];
+        return key + '=' + value;
       })
       .join('&');
 
@@ -39,7 +44,7 @@ export default class DataSource {
     options['headers']['x-reverse-proxy-ttl'] = options['cacheTime'] / 1000;
     options['headers']['x-mi-cbe'] = CD._hashForRequest(url, options);
 
-    return await CD.get(url, options);
+    return CD.get(url, options);
   }
 
   /**
@@ -66,8 +71,8 @@ export default class DataSource {
    * @param set
    * @param opts
    */
-  async getSingleTarget(opts: any = {}) {
-    return await this.getMultipleTargets(opts);
+  getSingleTarget(opts: any = {}) {
+    return this.getMultipleTargets(opts);
   }
 
   /**
@@ -93,5 +98,4 @@ export default class DataSource {
     const { data } = await this.getRawData(queryParams, opts);
     return JSON.parse(data);
   }
-
 }
