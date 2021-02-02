@@ -8,7 +8,7 @@ const babelConf = require('./babel-config');
 module.exports = function karmaConfig(config) {
   config.set({
     browsers: ['ChromeWithConfiguration'],
-    frameworks: ['qunit', 'sinon'],
+    frameworks: ['qunit'],
     files: ['test/*.js'],
     crossOriginAttribute: false,
     customLaunchers: {

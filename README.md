@@ -352,6 +352,12 @@ $ npm publish
 
 ## Changelog
 
+### 1.1.0
+
+- Stringifies objects before placing them into param string when using `getRawData`
+- Adds some typing in a couple locations
+- General dependency upgrades
+
 ### 1.0.0
 
 - Remove `getAllRows()` method
