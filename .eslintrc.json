@@ -1,0 +1,17 @@
+{
+  "extends": [
+    "@movable/eslint-config",
+    "@movable/eslint-config-typescript"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "globals": {
+    "QUnit": true
+  }
+}
