@@ -352,6 +352,17 @@ $ npm publish
 
 ## Changelog
 
+### 2.0.0
+
+- Stringifies objects before placing them into param string when using `getRawData`
+  - The old behavior:
+    ```
+      "key" + ["foo", "bar"]
+      "keyfoo,bar"
+    ```
+  - The above would produce an unexpected query param string which was not intentional
+- BREAKING: This adds enough dependency updates that we would feel more comfortable making this a major version change.
+
 ### 1.0.0
 
 - Remove `getAllRows()` method
