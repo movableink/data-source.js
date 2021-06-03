@@ -68,15 +68,6 @@ export default class DataSource {
 
   /**
    *
-   * @param set
-   * @param opts
-   */
-  getSingleTarget(opts: any = {}) {
-    return this.getMultipleTargets(opts);
-  }
-
-  /**
-   *
    * @param params
    * @param opts
    */
