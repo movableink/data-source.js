@@ -9,17 +9,18 @@ Data Source is a JS library meant to help developers access Movable Ink Data Sou
   - [Installation](#installation)
   - [Usage](#usage)
     - [Setup](#setup)
-    - [Fetching data](#fetching-data)
+    - [Fetching data for API and Website Data Sources](#fetching-data-for-api-and-website-data-sources)
+      - [Example:](#example)
     - [Multiple target retrieval for CSV Data Sources](#multiple-target-retrieval-for-csv-data-sources)
-      - [Example](#example)
-      - [Notes on multiple targets body:](#notes-on-multiple-targets-body)
-    - [Single target retrieval for CSV Data Sources](#single-target-retrieval-for-csv-data-sources)
       - [Example](#example-1)
+      - [Notes on multiple targets body:](#notes-on-multiple-targets-body)
     - [Get rows based on geo-location](#get-rows-based-on-geo-location)
       - [Example](#example-2)
       - [Details on how Sorcerer determines priority](#details-on-how-sorcerer-determines-priority)
   - [Publishing package:](#publishing-package)
   - [Changelog](#changelog)
+    - [3.0.0](#300)
+    - [2.0.0](#200)
     - [1.0.0](#100)
     - [0.3.0](#030)
     - [0.2.2](#022)
@@ -195,29 +196,6 @@ Which returns the following:
 
 - CSV rows will always be returned in descending order (last CSV row comes back first)
 
-### Single target retrieval for CSV Data Sources
-
-**_Input:_**
-options (this is optional in case you want to override existing headers or add new ones)
-**_Return value:_** an array of rows matching the set
-
-#### Example
-
-```js
-const options = {
-  method: 'POST', // method has to be POST
-  body: JSON.stringify([
-    {
-      Level: 1,
-      Tier: 'Silver',
-    },
-  ]),
-};
-
-const source = new DataSource('some_key');
-const data = await source.getSingleTarget(options);
-```
-
 ---
 
 ### Get rows based on geo-location
@@ -351,6 +329,10 @@ $ npm publish
 ---
 
 ## Changelog
+
+### 3.0.0
+
+- Remove `getSingleTarget` method
 
 ### 2.0.0
 

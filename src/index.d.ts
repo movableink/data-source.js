@@ -20,12 +20,6 @@ export default class DataSource {
     getMultipleTargets(opts?: any): Promise<any>;
     /**
      *
-     * @param set
-     * @param opts
-     */
-    getSingleTarget(opts?: any): Promise<any>;
-    /**
-     *
      * @param params
      * @param opts
      */

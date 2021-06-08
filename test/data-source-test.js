@@ -73,38 +73,6 @@ test('getMultipleTargets JSON parses response and returns data', async function 
   CD.get.restore();
 });
 
-test('getSingleTarget returns all rows for a single targeting set', async function (assert) {
-  const response = {
-    data:
-      '[{"Level":"1","Tier":"Silver","Content":"Tom and Jerry"},{"Level":"1","Tier":"Silver","Content":"Peter Pan"}]',
-  };
-
-  sinon.stub(CD, 'get').resolves(response);
-
-  const dataSource = new DataSource('some_key');
-
-  const expectedRows = [
-    { Level: '1', Tier: 'Silver', Content: 'Tom and Jerry' },
-    { Level: '1', Tier: 'Silver', Content: 'Peter Pan' },
-  ];
-
-  const targetingSet = [{ Level: '1', Tier: 'Silver' }];
-  const options = {
-    method: 'POST',
-    body: JSON.stringify(targetingSet),
-  };
-  const actualRows = await dataSource.getSingleTarget(options);
-  assert.propEqual(actualRows, expectedRows);
-
-  const requestMethod = CD.get.args[0][1]['method'];
-  assert.equal(requestMethod, 'POST');
-
-  const postBody = CD.get.args[0][1]['body'];
-  assert.equal(postBody, `[{"Level":"1","Tier":"Silver"}]`);
-
-  CD.get.restore();
-});
-
 test('getLocationTargets appends mi to internal query params and returns all geotargeting rows', async function (assert) {
   const response = {
     data:
