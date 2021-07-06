@@ -1,16 +1,125 @@
 import CD from 'cropduster';
 import { CDResponse } from '../types/cropduster';
 
+const TOKEN_API_VERSION = '1.1.0';
+
+interface Token {
+  name: string;
+  cacheOverride?: string;
+}
+
+interface TokenOptions {}
+
+interface TokenJSON {
+  name: string;
+  path?: string;
+  value?: string;
+  options?: TokenOptions;
+}
+
+interface TokenRequest {
+  tokenAPIVersion: string;
+  tokens: TokenJSON[];
+}
+
+export class RequestBuilder {
+  tokens;
+
+  constructor(tokens: Token[]) {
+    this.tokens = tokens;
+  }
+
+  asJSON(): TokenJSON[] {
+    return this.tokens.map((token) => {
+      token.validate();
+      return token.computedValue;
+    });
+  }
+
+  toJSON(): TokenRequest {
+    return { tokenAPIVersion: TOKEN_API_VERSION, tokens: this.asJSON() };
+  }
+}
+
 export interface TargetingParams {
   [key: string]: string | number | Object[] | Object;
+}
+
+function buildTokens(tokens) {
+  return tokens.map((token) => {
+    token.validate();
+
+    return token.computedValue;
+  });
+}
+
+export class TokenBase {
+  options = null;
+  requiredProperties = ['name', 'type'];
+  computedValue;
+  type = null;
+
+  constructor(options) {
+    this.options = options;
+    // this.validate() // we could potentially run validations whenever we instantiate a new token
+  }
+
+  validate() {
+    const missingProps = [];
+    this.requiredProperties.forEach((prop) => {
+      if (!this.options[prop]) {
+        missingProps.push(prop);
+      }
+    });
+
+    if (missingProps.length) {
+      throw new Error(
+        `Invalid properties for ${this.type} token:: "${missingProps.join(', ')}" is missing`
+      );
+    }
+  }
+}
+
+export class ReplaceToken extends TokenBase {
+  requiredProperties = ['name', 'value'];
+
+  constructor(options) {
+    super(options);
+  }
+
+  computedValue = {
+    name: this.options.name,
+    value: this.options.value,
+    type: 'replace',
+  };
+}
+
+export class HmacToken extends TokenBase {
+  requiredProperties = ['name', 'secretName', 'stringToSign', 'algorithm', 'encoding'];
+
+  constructor(options) {
+    super(options);
+  }
+
+  computedValue = {
+    name: this.options.name,
+    options: {
+      algorithm: this.options.algorithm,
+      encoding: this.options.encoding,
+      secretName: this.options.secretName,
+      stringToSign: this.options.stringToSign,
+    },
+    type: 'hmac',
+  };
 }
 
 export default class DataSource {
   key: string;
   sorcererUrlBase: string;
   miParams: Object;
+  tokens: Token[];
 
-  constructor(key: string) {
+  constructor(key: string, tokens: Token[]) {
     this.key = key;
     this.sorcererUrlBase = 'https://sorcerer.movableink-templates.com/data_sources';
     this.miParams = {
@@ -21,6 +130,7 @@ export default class DataSource {
       radius: 'mi_radius',
       limit: 'mi_limit',
     };
+    this.tokens = buildTokens(tokens);
   }
 
   /**
