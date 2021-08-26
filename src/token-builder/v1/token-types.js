@@ -1,4 +1,11 @@
 const REPLACE_CHAR_LIMIT = 100;
+const ALLOWED_ALGOS = new Set(['sha256', 'sha1', 'md5']);
+const ALLOWED_ENCODINGS = new Map([
+  ['hex', 'hex'],
+  ['base64', 'base64'],
+  ['base64url', 'base64'],
+  ['base64percent', 'base64'],
+]);
 
 export class TokenBase {
   constructor({ name, cacheOverride = null, skipCache = false }) {
@@ -60,4 +67,54 @@ export class ReplaceToken extends TokenBase {
       this.errors.push(`Replace value exceeds ${REPLACE_CHAR_LIMIT} character limit`);
     }
   };
+}
+
+export class HmacToken extends TokenBase {
+  constructor(params) {
+    super(params);
+    this.type = 'hmac';
+    this.hmacOptions = params.options;
+    this.validateOptions();
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      type: this.type,
+      cacheOverride: this.cacheOverride,
+      skipCache: this.skipCache,
+      options: this.hmacOptions,
+    };
+  }
+
+  validateOptions() {
+    super.validateOptions();
+
+    if (!ALLOWED_ALGOS.has(this.hmacOptions.algorithm)) {
+      this.errors.push('HMAC algorithm is invalid');
+    }
+
+    if (!this.hmacOptions.secretName) {
+      this.errors.push('HMAC secret name not provided');
+    }
+
+    if (!ALLOWED_ENCODINGS.has(this.hmacOptions.encoding)) {
+      this.errors.push('HMAC encoding is invalid');
+    }
+  }
+}
+
+export class RequestBuilder {
+  constructor(tokens) {
+    this.tokens = tokens || [];
+  }
+
+  toJSON() {
+    //TODO: how do we get the current version?
+    const payload = { tokenApiVersion: '1', tokens: [] };
+    for (const token of this.tokens) {
+      payload.tokens.push(token.toJSON());
+    }
+    return payload;
+  }
 }

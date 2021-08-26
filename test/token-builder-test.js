@@ -1,4 +1,9 @@
-import { TokenBase, ReplaceToken } from '../src/token-builder/v1/token-types';
+import {
+  TokenBase,
+  ReplaceToken,
+  HmacToken,
+  RequestBuilder,
+} from '../src/token-builder/v1/token-types';
 
 const { test, module } = QUnit;
 
@@ -101,10 +106,149 @@ module('token builder v1', function () {
       assert.equal(tokenModel.errors[0], 'Replace value exceeds 100 character limit');
     });
   });
+
+  module('HmacToken', function () {
+    test('can be instantiated with all options', (assert) => {
+      const hmacOptions = {
+        name: 'hmac_sig',
+        cacheOverride: 'xyz',
+        skipCache: true,
+        options: {
+          tokenName: 'hmac_sig',
+          stringToSign: 'application/json\nGET\n',
+          algorithm: 'sha1',
+          secretName: 'watson',
+          encoding: 'hex',
+        },
+      };
+
+      const tokenModel = new HmacToken(hmacOptions);
+
+      const expectedJson = {
+        name: 'hmac_sig',
+        type: 'hmac',
+        cacheOverride: 'xyz',
+        skipCache: true,
+        options: {
+          tokenName: 'hmac_sig',
+          stringToSign: 'application/json\nGET\n',
+          algorithm: 'sha1',
+          secretName: 'watson',
+          encoding: 'hex',
+        },
+      };
+
+      assert.deepEqual(tokenModel.toJSON(), expectedJson);
+    });
+
+    test('gets instantiated with default options', (assert) => {
+      const hmacOptions = {
+        name: 'hmac_sig',
+        options: {
+          tokenName: 'hmac_sig',
+          stringToSign: 'application/json\nGET\n',
+          algorithm: 'sha1',
+          secretName: 'watson',
+          encoding: 'hex',
+        },
+      };
+
+      const tokenModel = new HmacToken(hmacOptions);
+
+      const expectedJson = {
+        name: 'hmac_sig',
+        type: 'hmac',
+        cacheOverride: null,
+        skipCache: false,
+        options: {
+          tokenName: 'hmac_sig',
+          stringToSign: 'application/json\nGET\n',
+          algorithm: 'sha1',
+          secretName: 'watson',
+          encoding: 'hex',
+        },
+      };
+
+      assert.deepEqual(tokenModel.toJSON(), expectedJson);
+    });
+
+    test('will include an error if instantiated with missing options', (assert) => {
+      const hmacOptions = {
+        name: 'hmac_sig',
+        options: {
+          tokenName: 'hmac_sig',
+          stringToSign: 'application/json\nGET\n',
+          algorithm: 'invalid',
+          encoding: 'neo',
+        },
+      };
+
+      const tokenModel = new HmacToken(hmacOptions);
+
+      const expectedErrors = [
+        'HMAC algorithm is invalid',
+        'HMAC secret name not provided',
+        'HMAC encoding is invalid',
+      ];
+      assert.deepEqual(tokenModel.errors, expectedErrors);
+    });
+  });
+
+  module('RequestBuilder', function () {
+    test('builds post body payload', (assert) => {
+      const options = {
+        name: 'FavoriteBand',
+        cacheOverride: 'Movable Band',
+        value: 'Beatles',
+      };
+
+      const replaceToken = new ReplaceToken(options);
+
+      const hmacOptions = {
+        name: 'hmac_sig',
+        cacheOverride: 'xyz',
+        options: {
+          stringToSign: 'mystring',
+          algorithm: 'sha1',
+          secretName: 'watson',
+          encoding: 'hex',
+        },
+      };
+      const hmacToken = new HmacToken(hmacOptions);
+
+      const requestBuilder = new RequestBuilder([replaceToken, hmacToken]);
+
+      const expectedPayload = {
+        tokenApiVersion: '1',
+        tokens: [
+          {
+            name: 'FavoriteBand',
+            cacheOverride: 'Movable Band',
+            type: 'replace',
+            value: 'Beatles',
+            skipCache: false,
+          },
+          {
+            name: 'hmac_sig',
+            type: 'hmac',
+            cacheOverride: 'xyz',
+            skipCache: false,
+            options: {
+              algorithm: 'sha1',
+              encoding: 'hex',
+              secretName: 'watson',
+              stringToSign: 'mystring',
+            },
+          },
+        ],
+      };
+      assert.deepEqual(requestBuilder.toJSON(), expectedPayload);
+    });
+    //validation test
+  });
 });
 
 // todo:
-// hmac token
 // request builder test returning array of token objects
 
 // cards
