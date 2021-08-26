@@ -244,13 +244,39 @@ module('token builder v1', function () {
       };
       assert.deepEqual(requestBuilder.toJSON(), expectedPayload);
     });
-    //validation test
+
+    test('raises an error with invalid tokens', (assert) => {
+      const options = {
+        cacheOverride: 'Movable Band',
+      };
+
+      const replaceToken = new ReplaceToken(options);
+
+      const hmacOptions = {
+        cacheOverride: 'xyz',
+        options: {
+          stringToSign: 'mystring',
+          algorithm: 'ash1',
+          encoding: 'lex',
+        },
+      };
+      const hmacToken = new HmacToken(hmacOptions);
+
+      const requestBuilder = new RequestBuilder([replaceToken, hmacToken]);
+      const expectedErrors = [
+        'Errors found while parsing tokens:',
+        'token 1: Missing properties for replace token: "name, value".',
+        'token 2: Missing properties for hmac token: "name", HMAC algorithm is invalid, HMAC secret name not provided, HMAC encoding is invalid.',
+      ];
+
+      assert.throws(function () {
+        requestBuilder.toJSON();
+      }, new RegExp(expectedErrors.join('\n')));
+    });
   });
 });
 
 // todo:
-// request builder test returning array of token objects
-
 // cards
 // business logic
 // open api spec
