@@ -9,7 +9,7 @@ module.exports = function karmaConfig(config) {
   config.set({
     browsers: ['ChromeWithConfiguration'],
     frameworks: ['qunit'],
-    files: ['test/*.js'],
+    files: ['test/**/*.js'],
     crossOriginAttribute: false,
     customLaunchers: {
       ChromeWithConfiguration: {
@@ -18,7 +18,7 @@ module.exports = function karmaConfig(config) {
       },
     },
     preprocessors: {
-      'test/*.js': ['rollup'],
+      'test/**/*.js': ['rollup'],
     },
     rollupPreprocessor: {
       input: 'test/data-source-test.js',
