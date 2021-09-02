@@ -10,7 +10,7 @@ export class RequestBuilder {
 
     this.tokens.forEach((token, index) => {
       if (token.errors.length) {
-        errors.push(`token ${index + 1}: ${token.errors.join(', ')}.`);
+        errors.push(`token ${index + 1}: ${token.errors.join(', ')}`);
       } else {
         payload.tokens.push(token.toJSON());
       }
