@@ -111,7 +111,7 @@ export class HmacToken extends TokenBase {
   constructor(params) {
     super(params);
     this.type = 'hmac';
-    this.hmacOptions = params.options;
+    this.hmacOptions = params.options || {};
     this.validateOptions();
   }
 
