@@ -1,4 +1,5 @@
 import {
+  TokenBase,
   ReplaceToken,
   ReplaceLargeToken,
   SecretToken,
@@ -8,6 +9,45 @@ import {
 } from '../../src/token-builder/types';
 
 const { test, module } = QUnit;
+module('BaseToken', function () {
+  test('can be instantiated with all options', (assert) => {
+    const options = {
+      name: 'FavoriteBand',
+      cacheOverride: 'Movable Band',
+      skipCache: true,
+    };
+
+    const tokenModel = new TokenBase(options);
+
+    const expectedJson = {
+      name: 'FavoriteBand',
+      type: 'base',
+      cacheOverride: 'Movable Band',
+      skipCache: true,
+    };
+    assert.deepEqual(tokenModel.toJSON(), expectedJson);
+  });
+
+  test('can be instantiated with default options', (assert) => {
+    const tokenModel = new TokenBase({ name: 'FavoriteBand' });
+
+    const expectedJson = {
+      name: 'FavoriteBand',
+      type: 'base',
+      cacheOverride: null,
+      skipCache: false,
+    };
+    assert.deepEqual(tokenModel.toJSON(), expectedJson);
+  });
+
+  test('will include an error if instantiated with missing options', (assert) => {
+    const tokenModel = new TokenBase({});
+    tokenModel.validateOptions();
+
+    assert.equal(tokenModel.errors.length, 1);
+    assert.equal(tokenModel.errors[0], 'Missing properties for base token: "name"');
+  });
+});
 
 module('ReplaceToken', function () {
   test('can be instantiated with all options', (assert) => {

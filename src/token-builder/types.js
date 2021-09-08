@@ -13,6 +13,15 @@ export class TokenBase {
     this.skipCache = skipCache;
   }
 
+  toJSON() {
+    return {
+      name: this.name,
+      type: this.type,
+      cacheOverride: this.cacheOverride,
+      skipCache: this.skipCache,
+    };
+  }
+
   validateOptions() {
     const missingProps = [];
     this.requiredProperties.forEach((prop) => {
@@ -38,13 +47,9 @@ export class ReplaceToken extends TokenBase {
   }
 
   toJSON() {
-    return {
-      name: this.name,
-      type: this.type,
-      value: this.value,
-      cacheOverride: this.cacheOverride,
-      skipCache: this.skipCache,
-    };
+    const json = super.toJSON();
+
+    return { ...json, value: this.value };
   }
 
   validateOptions = () => {
@@ -67,13 +72,9 @@ export class ReplaceLargeToken extends TokenBase {
   }
 
   toJSON() {
-    return {
-      name: this.name,
-      type: this.type,
-      value: this.value,
-      cacheOverride: this.cacheOverride,
-      skipCache: this.skipCache,
-    };
+    const json = super.toJSON();
+
+    return { ...json, value: this.value };
   }
 
   validateOptions() {
@@ -97,13 +98,9 @@ export class SecretToken extends TokenBase {
   }
 
   toJSON() {
-    return {
-      name: this.name,
-      type: this.type,
-      path: this.path,
-      cacheOverride: this.cacheOverride,
-      skipCache: this.skipCache,
-    };
+    const json = super.toJSON();
+
+    return { ...json, path: this.path };
   }
 }
 
@@ -116,13 +113,9 @@ export class HmacToken extends TokenBase {
   }
 
   toJSON() {
-    return {
-      name: this.name,
-      type: this.type,
-      cacheOverride: this.cacheOverride,
-      skipCache: this.skipCache,
-      options: this.hmacOptions,
-    };
+    const json = super.toJSON();
+
+    return { ...json, options: this.hmacOptions };
   }
 
   validateOptions() {
@@ -151,13 +144,9 @@ export class Sha1Token extends TokenBase {
   }
 
   toJSON() {
-    return {
-      name: this.name,
-      type: this.type,
-      cacheOverride: this.cacheOverride,
-      skipCache: this.skipCache,
-      options: this.options,
-    };
+    const json = super.toJSON();
+
+    return { ...json, options: this.options };
   }
 
   hasInvalidSecrets() {
