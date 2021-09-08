@@ -17,7 +17,11 @@ export class RequestBuilder {
     });
 
     if (errors.length) {
-      throw new Error(`Errors found while parsing tokens:\n${errors.join('\n')}`);
+      throw new Error(
+        `Request was not made due to invalid tokens. See validation errors below:\n${errors.join(
+          '\n'
+        )}`
+      );
     }
 
     return payload;

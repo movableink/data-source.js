@@ -154,7 +154,7 @@ module('RequestBuilder', function () {
     ]);
 
     const expectedErrors = [
-      'Errors found while parsing tokens:',
+      'Request was not made due to invalid tokens. See validation errors below:',
       'token 1: Missing properties for replace token: "name, value"',
       `token 2: ReplaceLarge token can only be used when value exceeds ${REPLACE_CHAR_LIMIT} character limit`,
       'token 3: Missing properties for secret token: "path"',
