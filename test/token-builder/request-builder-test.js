@@ -155,7 +155,7 @@ module('RequestBuilder', function () {
 
     const expectedErrors = [
       'Request was not made due to invalid tokens. See validation errors below:',
-      'token 1: Missing properties for replace token: "name, value"',
+      'token 1: Missing properties for replace token: "name", Token was not instantiated with a replace value',
       `token 2: ReplaceLarge token can only be used when value exceeds ${REPLACE_CHAR_LIMIT} character limit`,
       'token 3: Missing properties for secret token: "path"',
       'token 4: Missing properties for hmac token: "name", HMAC algorithm is invalid, HMAC secret name not provided, HMAC encoding is invalid',

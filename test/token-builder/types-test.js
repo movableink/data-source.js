@@ -46,6 +46,12 @@ module('BaseToken', function () {
 
     assert.equal(tokenModel.errors.length, 1);
     assert.equal(tokenModel.errors[0], 'Missing properties for base token: "name"');
+
+    const tokenModelWithEmptyName = new TokenBase({ name: '' });
+    tokenModelWithEmptyName.validateOptions();
+
+    assert.equal(tokenModelWithEmptyName.errors.length, 1);
+    assert.equal(tokenModelWithEmptyName.errors[0], 'Missing properties for base token: "name"');
   });
 });
 
@@ -90,11 +96,18 @@ module('ReplaceToken', function () {
     assert.deepEqual(tokenModel.toJSON(), expectedJson);
   });
 
+  test('an empty string is a valid replace value', (assert) => {
+    const tokenModel = new ReplaceToken({ name: 'MyToken', value: '' });
+
+    assert.equal(tokenModel.errors.length, 0);
+  });
+
   test('will include an error if instantiated with missing options', (assert) => {
     const tokenModel = new ReplaceToken({});
 
-    assert.equal(tokenModel.errors.length, 1);
-    assert.equal(tokenModel.errors[0], 'Missing properties for replace token: "name, value"');
+    assert.equal(tokenModel.errors.length, 2);
+    assert.equal(tokenModel.errors[0], 'Missing properties for replace token: "name"');
+    assert.equal(tokenModel.errors[1], 'Token was not instantiated with a replace value');
   });
 
   test('will include an error if value is longer than replace character limit', (assert) => {
@@ -154,8 +167,9 @@ module('ReplaceLargeToken', function () {
   test('will include an error if instantiated with missing options', (assert) => {
     const tokenModel = new ReplaceLargeToken({});
 
-    assert.equal(tokenModel.errors.length, 1);
-    assert.equal(tokenModel.errors[0], 'Missing properties for replaceLarge token: "name, value"');
+    assert.equal(tokenModel.errors.length, 2);
+    assert.equal(tokenModel.errors[0], 'Missing properties for replaceLarge token: "name"');
+    assert.equal(tokenModel.errors[1], 'Token was not instantiated with a replace value');
   });
 
   test('will include an error if value is shorter than replace character limit', (assert) => {

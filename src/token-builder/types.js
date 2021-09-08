@@ -40,9 +40,7 @@ export class ReplaceToken extends TokenBase {
   constructor(params) {
     super(params);
     this.type = 'replace';
-    this.requiredProperties = [...this.requiredProperties, 'value'];
     this.value = params.value;
-
     this.validateOptions();
   }
 
@@ -55,7 +53,9 @@ export class ReplaceToken extends TokenBase {
   validateOptions = () => {
     super.validateOptions();
 
-    if (this.value && this.value.length > REPLACE_CHAR_LIMIT) {
+    if (this.value === null || this.value === undefined) {
+      this.errors.push('Token was not instantiated with a replace value');
+    } else if (this.value && this.value.length > REPLACE_CHAR_LIMIT) {
       this.errors.push(`Replace value exceeds ${REPLACE_CHAR_LIMIT} character limit`);
     }
   };
@@ -65,9 +65,7 @@ export class ReplaceLargeToken extends TokenBase {
   constructor(params) {
     super(params);
     this.type = 'replaceLarge';
-    this.requiredProperties = [...this.requiredProperties, 'value'];
     this.value = params.value;
-
     this.validateOptions();
   }
 
@@ -80,7 +78,9 @@ export class ReplaceLargeToken extends TokenBase {
   validateOptions() {
     super.validateOptions();
 
-    if (this.value && this.value.length <= REPLACE_CHAR_LIMIT) {
+    if (this.value === null || this.value === undefined) {
+      this.errors.push('Token was not instantiated with a replace value');
+    } else if (this.value && this.value.length <= REPLACE_CHAR_LIMIT) {
       this.errors.push(
         `ReplaceLarge token can only be used when value exceeds ${REPLACE_CHAR_LIMIT} character limit`
       );
