@@ -102,6 +102,15 @@ Which will replace the tokens in the call and effectively the call will be
 
 `https://product-api.com/product/123/abc`
 
+
+### Passing in tokens to the request body
+The `RequestBuilder` and `Token` utility classes allow users of `data-source.js` to easily pass in tokens to the body of the POST request when calling `getRawData` for an API data source.
+
+These tokens can be included in the `options` object as an alternative to passing them in as `targetingKeys`. The computed values of each token will replace that token when included in the data source's url, post body, or headers.
+
+Examples and additional details on the Token Builder API can be found in the [Wiki](https://github.com/movableink/data-source.js/wiki/Token-Builder-API
+).
+
 ### Multiple target retrieval for CSV Data Sources
 
 To fetch multiple targets from a CSV DataSource you can use the `getMultipleTargets` method, which will return you an array of objects based on the number of rows that match.
@@ -329,6 +338,10 @@ $ npm publish
 ---
 
 ## Changelog
+
+### 3.1.0
+
+- Creates `RequestBuilder` and "Token" type utility classes
 
 ### 3.0.0
 
