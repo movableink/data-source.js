@@ -227,7 +227,6 @@ module('HmacToken', function () {
       cacheOverride: 'xyz',
       skipCache: true,
       options: {
-        tokenName: 'hmac_sig',
         stringToSign: 'application/json\nGET\n',
         algorithm: 'sha1',
         secretName: 'watson',
@@ -243,7 +242,6 @@ module('HmacToken', function () {
       cacheOverride: 'xyz',
       skipCache: true,
       options: {
-        tokenName: 'hmac_sig',
         stringToSign: 'application/json\nGET\n',
         algorithm: 'sha1',
         secretName: 'watson',
@@ -258,7 +256,6 @@ module('HmacToken', function () {
     const hmacOptions = {
       name: 'hmac_sig',
       options: {
-        tokenName: 'hmac_sig',
         stringToSign: 'application/json\nGET\n',
         algorithm: 'sha1',
         secretName: 'watson',
@@ -274,7 +271,6 @@ module('HmacToken', function () {
       cacheOverride: null,
       skipCache: false,
       options: {
-        tokenName: 'hmac_sig',
         stringToSign: 'application/json\nGET\n',
         algorithm: 'sha1',
         secretName: 'watson',
@@ -289,7 +285,6 @@ module('HmacToken', function () {
     const hmacOptions = {
       name: 'hmac_sig',
       options: {
-        tokenName: 'hmac_sig',
         stringToSign: 'application/json\nGET\n',
         algorithm: 'invalid',
         encoding: 'neo',
