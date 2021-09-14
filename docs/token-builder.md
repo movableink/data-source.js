@@ -6,7 +6,7 @@ The Token Builder is comprised of two parts: the `RequestBuilder` class and a va
 
 Each of the token classes has its own set of validations which are run when the token is instantiated. Any errors are added to an `errors` property on that instance of the token class.
 
-In `sorcerer`, the Token Parser will extract the tokens from request body and replace any occurrence of the token in an API data source's `url`, `body`, or `headers` with the token's computed value.
+In `sorcerer`, the Token Parser will extract the tokens from the request body and replace any occurrence of the token in an API data source's `url`, `body`, or `headers` with the token's computed value.
 
 ## Token Types
 
@@ -14,17 +14,17 @@ The Token Builder API includes several token utility classes, each serving a uni
 
 Currently supported tokens are:
 
-- ReplaceToken
-- ReplaceLargeToken
-- SecretToken
-- HmacToken
-- Sha1Token
+- [ReplaceToken](#replacetoken)
+- [ReplaceLargeToken](#replacelargetoken)
+- [SecretToken](#secrettoken)
+- [HmacToken](#hmactoken)
+- [Sha1Token](#sha1token)
 
 ### ReplaceToken
 
-Replaces token with the `value` included in the token options. The length of this value must be less than 100 characters.
+Replaces token with the `value` included in the token options. The length of this value must be no greater than 100 characters.
 
-Example:
+**Example:**
 
 ```jsx
 const options = {
@@ -48,7 +48,7 @@ tokenModel.toJSON() // returns:
 
 ### ReplaceLargeToken
 
-Functionally, this behaves the same as the `ReplaceToken`, with the difference being that this token should only be used if the length of the replace value is greater than a specified character limit
+Functionally, this behaves the same as the `ReplaceToken`, with the difference being that this token should only be used if the length of the replace value is greater than 100 characters.
 
 **Example:**
 
@@ -67,7 +67,7 @@ const tokenModel = new ReplaceLargeToken(options);
 tokenModel.toJSON() // returns:
 // {
 //   name: 'FavoriteBand',
-//   type: 'replace',
+//   type: 'replaceLarge',
 //   cacheOverride: 'Movable Band',
 //   skipCache: true,
 //   value: 'some really long string',
@@ -97,9 +97,9 @@ const tokenModel = new SecretToken(options);
 
 ### HmacToken
 
-Replaces HMAC token with an HMAC signature generated from the token options
+Replaces HMAC token with an HMAC signature generated from the token options.
 
-O**ptions:**
+**Options:**
 
 - **stringToSign**
 
@@ -119,7 +119,7 @@ O**ptions:**
 
     Once the signature is generated it needs to be encoded
 
-    The following encodings are supported:`hex`, `base64`,`base64url` ,`base64percent`
+    The following encodings are supported: `hex`, `base64`, `base64url`, `base64percent`
 
     - `base64url` produces the same result as `base64` but in addition also replaces
 
@@ -177,7 +177,7 @@ Replaces token with a SHA-1 signature generated from the token options.
 
 - tokens
 
-    An array of [Secret]() tokens that could be included in the `text`. When included, these tokens will be interpolated into the `text`
+    An array of [Secret](#secrettoken) tokens that could be included in the `text`. When included, these tokens will be interpolated into the `text`
 
 **Example:**
 
@@ -229,7 +229,7 @@ The request builder has a `tokenApiVersion` property which will automatically be
 
 ### Generating a request payload
 
-Example
+**Example:**
 
 ```jsx
 const replaceToken = new ReplaceToken({
@@ -276,7 +276,7 @@ requestBuilder.toJSON() // returns
 
 If any invalid tokens are passed into `RequestBuilder` and `toJSON()` is called, an error will be thrown which will state the validation error(s) for each token, separated by the tokens' indexes
 
-Example message:
+**Example message:**
 
 ```jsx
 "Error: Request was not made due to invalid tokens. See validation errors below:
