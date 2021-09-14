@@ -108,7 +108,7 @@ The `RequestBuilder` and `Token` utility classes allow users of `data-source.js`
 
 These tokens can be included in the `options` object as an alternative to passing them in as `targetingKeys`. The computed values of each token will replace that token when included in the data source's url, post body, or headers.
 
-Examples and additional details on the Token Builder API can be found in the [Wiki](https://github.com/movableink/data-source.js/wiki/Token-Builder-API
+[See separate docs for examples and additional details on the Token Builder API](./docs/token-builder.md)
 ).
 
 ### Multiple target retrieval for CSV Data Sources
