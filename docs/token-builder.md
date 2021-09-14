@@ -29,9 +29,7 @@ Replaces token with the `value` included in the token options. The length of thi
 ```jsx
 const options = {
   name: 'FavoriteBand',
-  cacheOverride: 'Movable Band',
   value: 'Beatles',
-  skipCache: true,
 };
 
 const tokenModel = new ReplaceToken(options);
@@ -40,8 +38,8 @@ tokenModel.toJSON() // returns:
 // {
 //   name: 'FavoriteBand',
 //   type: 'replace',
-//   cacheOverride: 'Movable Band',
-//   skipCache: true,
+//   cacheOverride: null,
+//   skipCache: false,
 //   value: 'Beatles',
 // };
 ```
@@ -57,9 +55,7 @@ const replaceValue = "some really long string"
 
 const options = {
   name: 'FavoriteBand',
-  cacheOverride: 'Movable Band',
   value: replaceValue,
-  skipCache: true,
 };
 
 const tokenModel = new ReplaceLargeToken(options);
@@ -68,8 +64,8 @@ tokenModel.toJSON() // returns:
 // {
 //   name: 'FavoriteBand',
 //   type: 'replaceLarge',
-//   cacheOverride: 'Movable Band',
-//   skipCache: true,
+//   cacheOverride: null,
+//   skipCache: false,
 //   value: 'some really long string',
 // };
 ```
@@ -81,7 +77,7 @@ Replaces token with the decrypted value of the a secret, where `path` is the nam
 **Example:**
 
 ```jsx
-const options = { name: 'myApiKey', path: 'watson', skipCache: true, cacheOverride: 'xyz' };
+const options = { name: 'myApiKey', path: 'watson' };
 const tokenModel = new SecretToken(options);
 
 // tokenModel.toJSON() returns:
@@ -89,8 +85,8 @@ const tokenModel = new SecretToken(options);
 //   name: 'myApiKey',
 //   type: 'secret',
 //   path: 'watson',
-//   skipCache: true,
-//   cacheOverride: 'xyz',
+//   cacheOverride: null,
+//   skipCache: false,
 // };
 
 ```
@@ -132,8 +128,6 @@ Replaces HMAC token with an HMAC signature generated from the token options.
 ```jsx
 const hmacOptions = {
   name: 'hmac_sig',
-  cacheOverride: 'xyz',
-  skipCache: true,
   options: {
     stringToSign: 'some_message',
     algorithm: 'sha1',
@@ -148,8 +142,8 @@ tokenModel.toJSON() // returns:
 // {
 //   name: 'hmac_sig',
 //   type: 'hmac',
-//   cacheOverride: 'xyz',
-//   skipCache: true,
+//   cacheOverride: null,
+//   skipCache: false,
 //   options: {
 //     stringToSign: 'some_message',
 //     algorithm: 'sha1',
@@ -185,13 +179,11 @@ Replaces token with a SHA-1 signature generated from the token options.
 const tokens = [{ name: 'secureValue', type: 'secret', path: 'mySecretPath' }];
 const sha1Options = {
   name: 'FavoriteBand',
-  cacheOverride: 'Movable Band',
   options: {
     text: 'my text',
     encoding: 'hex',
     tokens,
   },
-  skipCache: true,
 };
 
 const tokenModel = new Sha1Token(sha1Options);
@@ -200,8 +192,8 @@ tokenModel.toJSON() // returns:
 // {
 //   name: 'FavoriteBand',
 //   type: 'sha1',
-//   cacheOverride: 'Movable Band',
-//   skipCache: true,
+//   cacheOverride: null,
+//   skipCache: false,
 //   options: {
 //     text: 'my text',
 //     encoding: 'hex',
@@ -217,7 +209,51 @@ Each token has a couple of properties for handling how the token is included whe
 - **skipCache** - if set to `true`, then the token will not be considered when caching requests
 - **cacheOverride** - if given a value, this will be used in place of the value of the token when generating the cache key
 
-By default, a `Replace` token's  `value` will be included as part of the cache key. `ReplaceLarge`, `Secret`, `Hmac` and `Sha1` tokens will not be included when generating a cache key unless `cacheOverride` is supplied.
+**Examples:**
+
+Setting `skipCache` to `true` for a ReplaceToken
+```jsx
+const options = {
+  name: 'FavoriteBand',
+  value: 'Beatles',
+  skipCache: true
+};
+
+const tokenModel = new ReplaceToken(options);
+
+tokenModel.toJSON() // returns:
+// {
+//   name: 'FavoriteBand',
+//   type: 'replace',
+//   cacheOverride: null,
+//   skipCache: true,
+//   value: 'Beatles',
+// };
+```
+
+Setting a `cacheOverride` for a ReplaceLarge token
+```jsx
+const replaceValue = "some really long string"
+
+const options = {
+  name: 'SongLyrics',
+  value: replaceValue,
+  cacheOverride: 'name of song'
+};
+
+const tokenModel = new ReplaceLargeToken(options);
+
+tokenModel.toJSON() // returns:
+// {
+//   name: 'SongLyrics',
+//   type: 'replaceLarge',
+//   cacheOverride: 'name of song',
+//   skipCache: false,
+//   value: 'some really long string',
+// };
+```
+
+Note: By default, a `Replace` token's `value` will be included as part of the cache key. `ReplaceLarge`, `Secret`, `Hmac` and `Sha1` tokens will not be included when generating a cache key unless `cacheOverride` is supplied.
 
 ## RequestBuilder
 
