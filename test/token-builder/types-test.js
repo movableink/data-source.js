@@ -5,7 +5,7 @@ import {
   SecretToken,
   HmacToken,
   Sha1Token,
-  REPLACE_CHAR_LIMIT,
+  CHAR_LIMIT,
 } from '../../src/token-builder/types';
 
 const { test, module } = QUnit;
@@ -53,11 +53,40 @@ module('BaseToken', function () {
     assert.equal(tokenModelWithEmptyName.errors.length, 1);
     assert.equal(tokenModelWithEmptyName.errors[0], 'Missing properties for base token: "name"');
   });
+
+  test('will include an error if cacheOverride is over the character limit', (assert) => {
+    {
+      const options = {
+        name: 'FavoriteBand',
+        type: 'base',
+        cacheOverride: '*'.repeat(CHAR_LIMIT),
+      };
+
+      const token1 = new TokenBase(options);
+      token1.validateOptions();
+
+      assert.equal(token1.errors.length, 0);
+    }
+
+    {
+      const options = {
+        name: 'FavoriteBand',
+        type: 'base',
+        cacheOverride: '*'.repeat(CHAR_LIMIT + 1),
+      };
+
+      const token1 = new TokenBase(options);
+      token1.validateOptions();
+
+      assert.equal(token1.errors.length, 1);
+      assert.equal(token1.errors[0], `cacheOverride cannot be over ${CHAR_LIMIT} characters`);
+    }
+  });
 });
 
 module('ReplaceToken', function () {
   test('can be instantiated with all options', (assert) => {
-    const replaceValue = '*'.repeat(REPLACE_CHAR_LIMIT);
+    const replaceValue = '*'.repeat(CHAR_LIMIT);
 
     const options = {
       name: 'FavoriteBand',
@@ -111,20 +140,17 @@ module('ReplaceToken', function () {
   });
 
   test('will include an error if value is longer than replace character limit', (assert) => {
-    const value = '*'.repeat(REPLACE_CHAR_LIMIT + 1);
+    const value = '*'.repeat(CHAR_LIMIT + 1);
     const tokenModel = new ReplaceToken({ name: 'my token', value });
 
     assert.equal(tokenModel.errors.length, 1);
-    assert.equal(
-      tokenModel.errors[0],
-      `Replace value exceeds ${REPLACE_CHAR_LIMIT} character limit`
-    );
+    assert.equal(tokenModel.errors[0], `Replace value exceeds ${CHAR_LIMIT} character limit`);
   });
 });
 
 module('ReplaceLargeToken', function () {
   test('can be instantiated with all options', (assert) => {
-    const replaceValue = '*'.repeat(REPLACE_CHAR_LIMIT + 1);
+    const replaceValue = '*'.repeat(CHAR_LIMIT + 1);
 
     const options = {
       name: 'FavoriteBand',
@@ -146,7 +172,7 @@ module('ReplaceLargeToken', function () {
   });
 
   test('can be instantiated with default options', (assert) => {
-    const replaceValue = '*'.repeat(REPLACE_CHAR_LIMIT + 1);
+    const replaceValue = '*'.repeat(CHAR_LIMIT + 1);
     const options = {
       name: 'FavoriteBand',
       value: replaceValue,
@@ -178,7 +204,7 @@ module('ReplaceLargeToken', function () {
     assert.equal(tokenModel.errors.length, 1);
     assert.equal(
       tokenModel.errors[0],
-      `ReplaceLarge token can only be used when value exceeds ${REPLACE_CHAR_LIMIT} character limit`
+      `ReplaceLarge token can only be used when value exceeds ${CHAR_LIMIT} character limit`
     );
   });
 });
