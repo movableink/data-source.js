@@ -1,5 +1,5 @@
 import { RequestBuilder } from '../../src/token-builder/request-builder';
-import { REPLACE_CHAR_LIMIT } from '../../src/token-builder/types';
+import { CHAR_LIMIT } from '../../src/token-builder/types';
 import {
   ReplaceToken,
   ReplaceLargeToken,
@@ -20,7 +20,7 @@ module('RequestBuilder', function () {
     const replaceLargeToken = new ReplaceLargeToken({
       name: 'band',
       cacheOverride: 'flooding',
-      value: '*'.repeat(REPLACE_CHAR_LIMIT + 1),
+      value: '*'.repeat(CHAR_LIMIT + 1),
       skipCache: true,
     });
 
@@ -73,7 +73,7 @@ module('RequestBuilder', function () {
           name: 'band',
           type: 'replaceLarge',
           cacheOverride: 'flooding',
-          value: '*'.repeat(REPLACE_CHAR_LIMIT + 1),
+          value: '*'.repeat(CHAR_LIMIT + 1),
           skipCache: true,
         },
         {
@@ -156,7 +156,7 @@ module('RequestBuilder', function () {
     const expectedErrors = [
       'Request was not made due to invalid tokens. See validation errors below:',
       'token 1: Missing properties for replace token: "name", Token was not instantiated with a replace value',
-      `token 2: ReplaceLarge token can only be used when value exceeds ${REPLACE_CHAR_LIMIT} character limit`,
+      `token 2: ReplaceLarge token can only be used when value exceeds ${CHAR_LIMIT} character limit`,
       'token 3: Missing properties for secret token: "path"',
       'token 4: Missing properties for hmac token: "name", HMAC algorithm is invalid, HMAC secret name not provided, HMAC encoding is invalid',
       'token 5: SHA1 encoding is invalid, Invalid secret token passed into SHA1 tokens array',

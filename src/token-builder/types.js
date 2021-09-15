@@ -1,7 +1,7 @@
 const ALLOWED_ALGOS = new Set(['sha256', 'sha1', 'md5']);
 const ALLOWED_ENCODINGS = new Set(['hex', 'base64', 'base64url', 'base64percent']);
 
-export const REPLACE_CHAR_LIMIT = 100;
+export const CHAR_LIMIT = 100;
 
 export class TokenBase {
   constructor({ name, cacheOverride = null, skipCache = false }) {
@@ -33,6 +33,10 @@ export class TokenBase {
     if (missingProps.length) {
       this.errors.push(`Missing properties for ${this.type} token: "${missingProps.join(', ')}"`);
     }
+
+    if (typeof this.cacheOverride === 'string' && this.cacheOverride.length > CHAR_LIMIT) {
+      this.errors.push(`cacheOverride cannot be over ${CHAR_LIMIT} characters`);
+    }
   }
 }
 
@@ -55,8 +59,8 @@ export class ReplaceToken extends TokenBase {
 
     if (this.value == undefined) {
       this.errors.push('Token was not instantiated with a replace value');
-    } else if (this.value && this.value.length > REPLACE_CHAR_LIMIT) {
-      this.errors.push(`Replace value exceeds ${REPLACE_CHAR_LIMIT} character limit`);
+    } else if (this.value && this.value.length > CHAR_LIMIT) {
+      this.errors.push(`Replace value exceeds ${CHAR_LIMIT} character limit`);
     }
   };
 }
@@ -80,9 +84,9 @@ export class ReplaceLargeToken extends TokenBase {
 
     if (this.value === null || this.value === undefined) {
       this.errors.push('Token was not instantiated with a replace value');
-    } else if (this.value && this.value.length <= REPLACE_CHAR_LIMIT) {
+    } else if (this.value && this.value.length <= CHAR_LIMIT) {
       this.errors.push(
-        `ReplaceLarge token can only be used when value exceeds ${REPLACE_CHAR_LIMIT} character limit`
+        `ReplaceLarge token can only be used when value exceeds ${CHAR_LIMIT} character limit`
       );
     }
   }
