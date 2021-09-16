@@ -34,7 +34,7 @@ export class TokenBase {
       this.errors.push(`Missing properties for ${this.type} token: "${missingProps.join(', ')}"`);
     }
 
-    if (typeof this.cacheOverride === 'string' && this.cacheOverride.length > CHAR_LIMIT) {
+    if (this.cacheOverride && this.cacheOverride.length > CHAR_LIMIT) {
       this.errors.push(`cacheOverride cannot be over ${CHAR_LIMIT} characters`);
     }
   }
