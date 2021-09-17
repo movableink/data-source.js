@@ -19,6 +19,7 @@ Data Source is a JS library meant to help developers access Movable Ink Data Sou
       - [Details on how Sorcerer determines priority](#details-on-how-sorcerer-determines-priority)
   - [Publishing package:](#publishing-package)
   - [Changelog](#changelog)
+    - [3.1.0](#310)
     - [3.0.0](#300)
     - [2.0.0](#200)
     - [1.0.0](#100)
@@ -79,7 +80,7 @@ const { data } = await source.getRawData(targetingKeys, options);
 The `key` above is supposed to be a unique identifier that refers to the data source that you are trying to receive raw
 data from. You can find this key in the Movable Ink platform.
 
-#### Example:
+#### Example
 
 If the API DS is set up with the following URL
 
@@ -108,8 +109,7 @@ The `RequestBuilder` and `Token` utility classes allow users of `data-source.js`
 
 These tokens can be included in the `options` object as an alternative to passing them in as `targetingKeys`. The computed values of each token will replace that token when included in the data source's url, post body, or headers.
 
-[See separate docs for examples and additional details on the Token Builder API](./docs/token-builder.md)
-).
+[See separate docs for examples and additional details on the Token Builder API](./docs/token-builder.md).
 
 ### Multiple target retrieval for CSV Data Sources
 
