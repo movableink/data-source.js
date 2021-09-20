@@ -57,7 +57,7 @@ export class ReplaceToken extends TokenBase {
   validateOptions = () => {
     super.validateOptions();
 
-    if (this.value == undefined) {
+    if (this.value == null) {
       this.errors.push('Token was not instantiated with a replace value');
     } else if (this.value && this.value.length > CHAR_LIMIT) {
       this.errors.push(`Replace value exceeds ${CHAR_LIMIT} character limit`);
@@ -82,7 +82,7 @@ export class ReplaceLargeToken extends TokenBase {
   validateOptions() {
     super.validateOptions();
 
-    if (this.value == undefined) {
+    if (this.value == null) {
       this.errors.push('Token was not instantiated with a replace value');
     } else if (this.value && this.value.length <= CHAR_LIMIT) {
       this.errors.push(
