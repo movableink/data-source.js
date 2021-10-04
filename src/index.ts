@@ -1,5 +1,13 @@
 import CD from 'cropduster';
 import { CDResponse } from '../types/cropduster';
+export { RequestBuilder } from './token-builder/request-builder';
+export {
+  ReplaceToken,
+  ReplaceLargeToken,
+  SecretToken,
+  HmacToken,
+  Sha1Token,
+} from './token-builder/types';
 
 export interface TargetingParams {
   [key: string]: string | number | Object[] | Object;
