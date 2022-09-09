@@ -28,7 +28,7 @@ The Token Builder API includes several token utility classes, each serving a uni
 
 Tokens are instantiated with the following params:
 - **name** (required) - the name of the token
-- **skipCache** (optional) - if set to `true`, then the token will be ignored when caching requests.   WARNING: This should be used with caution and **never** used with tokens that are related to personalized content.
+- **skipCache** (optional) - WARNING: This should be used with caution and **never** used with tokens that are related to personalized content.  If set to `true`, then the token will be ignored when caching requests. See additional info in [Caching](#caching) section below.
 - **cacheOverride** (optional) - when provided, this value will be used when caching requests
 
 In addition, each type of token will have its own unique set of properties it should be instantiated with, detailed below.
