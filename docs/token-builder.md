@@ -7,18 +7,20 @@ The Token Builder is comprised of two parts: the `RequestBuilder` class and a va
 In `sorcerer`, the Token Parser will extract the tokens from the request body and replace any occurrence of the token in an API data source's `url`, `body`, or `headers` with the token's computed value.
 
 ## Table of Contents
-- [Overview](#overview)
-- [Token Classes](#token-classes)
+- [Token Builder API](#token-builder-api)
+  - [Overview](#overview)
+  - [Table of Contents](#table-of-contents)
+  - [Token Classes](#token-classes)
     - [ReplaceToken](#replacetoken)
     - [ReplaceLargeToken](#replacelargetoken)
     - [SecretToken](#secrettoken)
     - [HmacToken](#hmactoken)
     - [Sha1Token](#sha1token)
-- [RequestBuilder](#requestbuilder)
+  - [RequestBuilder](#requestbuilder)
     - [Generating a request payload](#generating-a-request-payload)
-    - [Error handling](#error-handling)
-- [Making a request](#making-a-request)
-- [Caching](#caching)
+    - [Error Handling](#error-handling)
+  - [Making a request](#making-a-request)
+  - [**Caching**](#caching)
 
 ## Token Classes
 
@@ -26,7 +28,7 @@ The Token Builder API includes several token utility classes, each serving a uni
 
 Tokens are instantiated with the following params:
 - **name** (required) - the name of the token
-- **skipCache** (optional) - if set to `true`, then the token will not be considered when caching requests
+- **skipCache** (optional) - if set to `true`, then the token will be ignored when caching requests.   WARNING: This should be used with caution and **never** used with tokens that are related to personalized content.
 - **cacheOverride** (optional) - when provided, this value will be used when caching requests
 
 In addition, each type of token will have its own unique set of properties it should be instantiated with, detailed below.
