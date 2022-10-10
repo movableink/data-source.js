@@ -5,6 +5,7 @@ import {
   ReplaceLargeToken,
   SecretToken,
   HmacToken,
+  RsaToken,
   Sha1Token,
 } from '../../src/token-builder/types';
 const { test, module } = QUnit;
@@ -42,6 +43,18 @@ module('RequestBuilder', function () {
     };
     const hmacToken = new HmacToken(hmacOptions);
 
+    const rsaOptions = {
+      name: 'rsa_sig',
+      cacheOverride: 'xyz',
+      options: {
+        stringToSign: 'mystring',
+        algorithm: 'sha1',
+        secretName: 'watson',
+        encoding: 'hex',
+      },
+    };
+    const rsaToken = new RsaToken(rsaOptions);
+
     const sha1Token = new Sha1Token({
       name: 'sha1_sig',
       options: {
@@ -56,6 +69,7 @@ module('RequestBuilder', function () {
       replaceLargeToken,
       secretToken,
       hmacToken,
+      rsaToken,
       sha1Token,
     ]);
 
@@ -86,6 +100,18 @@ module('RequestBuilder', function () {
         {
           name: 'hmac_sig',
           type: 'hmac',
+          cacheOverride: 'xyz',
+          skipCache: false,
+          options: {
+            algorithm: 'sha1',
+            encoding: 'hex',
+            secretName: 'watson',
+            stringToSign: 'mystring',
+          },
+        },
+        {
+          name: 'rsa_sig',
+          type: 'rsa',
           cacheOverride: 'xyz',
           skipCache: false,
           options: {
@@ -136,6 +162,16 @@ module('RequestBuilder', function () {
     };
     const hmacToken = new HmacToken(hmacOptions);
 
+    const rsaOptions = {
+      cacheOverride: 'xyz',
+      options: {
+        stringToSign: 'mystring',
+        algorithm: 'ash1',
+        encoding: 'lex',
+      },
+    };
+    const rsaToken = new RsaToken(rsaOptions);
+
     const sha1Token = new Sha1Token({
       name: 'sha1_sig',
       options: {
@@ -150,6 +186,7 @@ module('RequestBuilder', function () {
       replaceLargeToken,
       secretToken,
       hmacToken,
+      rsaToken,
       sha1Token,
     ]);
 
@@ -159,7 +196,8 @@ module('RequestBuilder', function () {
       `token 2: ReplaceLarge token can only be used when value exceeds ${CHAR_LIMIT} character limit`,
       'token 3: Missing properties for secret token: "path"',
       'token 4: Missing properties for hmac token: "name", HMAC algorithm is invalid, HMAC secret name not provided, HMAC encoding is invalid',
-      'token 5: SHA1 encoding is invalid, Invalid secret token passed into SHA1 tokens array',
+      'token 5: Missing properties for rsa token: "name", RSA algorithm is invalid, RSA secret name not provided, RSA encoding is invalid',
+      'token 6: SHA1 encoding is invalid, Invalid secret token passed into SHA1 tokens array',
     ];
 
     assert.throws(function () {

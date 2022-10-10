@@ -139,6 +139,37 @@ export class HmacToken extends TokenBase {
   }
 }
 
+export class RsaToken extends TokenBase {
+  constructor(params) {
+    super(params);
+    this.type = 'rsa';
+    this.rsaOptions = params.options || {};
+    this.validateOptions();
+  }
+
+  toJSON() {
+    const json = super.toJSON();
+
+    return { ...json, options: this.rsaOptions };
+  }
+
+  validateOptions() {
+    super.validateOptions();
+
+    if (!ALLOWED_ALGOS.has(this.rsaOptions.algorithm)) {
+      this.errors.push('RSA algorithm is invalid');
+    }
+
+    if (!this.rsaOptions.secretName) {
+      this.errors.push('RSA secret name not provided');
+    }
+
+    if (!ALLOWED_ENCODINGS.has(this.rsaOptions.encoding)) {
+      this.errors.push('RSA encoding is invalid');
+    }
+  }
+}
+
 export class Sha1Token extends TokenBase {
   constructor(params) {
     super(params);

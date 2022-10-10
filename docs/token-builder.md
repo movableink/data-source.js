@@ -13,6 +13,7 @@ In `sorcerer`, the Token Parser will extract the tokens from the request body an
     - [ReplaceLargeToken](#replacelargetoken)
     - [SecretToken](#secrettoken)
     - [HmacToken](#hmactoken)
+    - [RsaToken](#rsatoken)
     - [Sha1Token](#sha1token)
 - [RequestBuilder](#requestbuilder)
     - [Generating a request payload](#generating-a-request-payload)
@@ -37,6 +38,7 @@ Currently supported tokens are:
 - [ReplaceLargeToken](#replacelargetoken)
 - [SecretToken](#secrettoken)
 - [HmacToken](#hmactoken)
+- [RsaToken](#rsatoken)
 - [Sha1Token](#sha1token)
 
 
@@ -90,7 +92,9 @@ const tokenModel = new SecretToken(params);
 ```
 
 ### HmacToken
-Replaces token with an HMAC signature.
+Replaces token with an HMAC signature. Used in conjunction with a `secretName` parameter which corresponds to a secret stored on a data source.
+
+HMAC uses symmetric encryption which means the signature requires a shared secret on the Data Source (reference via `secretName`) that the origin API will have a copy of and use to verify.
 
 **Params**
 - **options** (required)
@@ -115,6 +119,37 @@ const params = {
 };
 
 const tokenModel = new HmacToken(params);
+```
+
+### RsaToken
+Replaces token with an HMAC signature. Used in conjunction with a `secretName` parameter which corresponds to a secret stored on a data source.
+
+RSA uses asymmetric encryption which means the signature requires a RSA keypair. The private key is typically stored on the Data Source (reference via `secretName`) whereas the public key is given to
+the origin API's owner to use to verify requests.
+
+**Params**
+- **options** (required)
+  - **stringToSign** (optional) - any string that will be used when generating HMAC signature
+  - **algorithm** (required)- the hashing algorithm: `sha1` , `sha256`, `md5`
+  - **secretName** (required) - name of the data source secret (e.g. `watson`)
+  - **encoding** (required) - option to encode the signature once it is generated: `hex`, `base64`, `base64url`, `base64percent`
+      - `base64url` produces the same result as `base64` but in addition also replaces `+` with `-` , `/` with `_` , and removes the trailing padding character `=`
+      - `base64percent` encodes the signature as `base64` and then also URI percent encodes it
+
+**Example:**
+
+```jsx
+const params = {
+  name: 'rsa_sig',
+  options: {
+    stringToSign: 'some_message',
+    algorithm: 'sha1',
+    secretName: 'watson',
+    encoding: 'hex',
+  },
+};
+
+const tokenModel = new RsaToken(params);
 ```
 
 ### Sha1Token
