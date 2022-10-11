@@ -122,14 +122,14 @@ const tokenModel = new HmacToken(params);
 ```
 
 ### RsaToken
-Replaces token with an HMAC signature. Used in conjunction with a `secretName` parameter which corresponds to a secret stored on a data source.
+Replaces token with an RSA signature. Used in conjunction with a `secretName` parameter which corresponds to a secret stored on a data source.
 
 RSA uses asymmetric encryption which means the signature requires a RSA keypair. The private key is typically stored on the Data Source (reference via `secretName`) whereas the public key is given to
 the origin API's owner to use to verify requests.
 
 **Params**
 - **options** (required)
-  - **stringToSign** (optional) - any string that will be used when generating HMAC signature
+  - **stringToSign** (optional) - any string that will be used when generating an RSA signature
   - **algorithm** (required)- the hashing algorithm: `sha1` , `sha256`, `md5`
   - **secretName** (required) - name of the data source secret (e.g. `watson`)
   - **encoding** (required) - option to encode the signature once it is generated: `hex`, `base64`, `base64url`, `base64percent`
