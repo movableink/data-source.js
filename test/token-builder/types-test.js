@@ -4,6 +4,7 @@ import {
   ReplaceLargeToken,
   SecretToken,
   HmacToken,
+  RsaToken,
   Sha1Token,
   CHAR_LIMIT,
 } from '../../src/token-builder/types';
@@ -323,6 +324,88 @@ module('HmacToken', function () {
       'HMAC algorithm is invalid',
       'HMAC secret name not provided',
       'HMAC encoding is invalid',
+    ];
+    assert.deepEqual(tokenModel.errors, expectedErrors);
+  });
+});
+
+module('RsaToken', function () {
+  test('can be instantiated with all options', (assert) => {
+    const rsaOptions = {
+      name: 'rsa_sig',
+      cacheOverride: 'xyz',
+      skipCache: true,
+      options: {
+        stringToSign: 'application/json\nGET\n',
+        algorithm: 'sha1',
+        secretName: 'watson',
+        encoding: 'hex',
+      },
+    };
+
+    const tokenModel = new RsaToken(rsaOptions);
+
+    const expectedJson = {
+      name: 'rsa_sig',
+      type: 'rsa',
+      cacheOverride: 'xyz',
+      skipCache: true,
+      options: {
+        stringToSign: 'application/json\nGET\n',
+        algorithm: 'sha1',
+        secretName: 'watson',
+        encoding: 'hex',
+      },
+    };
+
+    assert.deepEqual(tokenModel.toJSON(), expectedJson);
+  });
+
+  test('gets instantiated with default options', (assert) => {
+    const rsaOptions = {
+      name: 'rsa_sig',
+      options: {
+        stringToSign: 'application/json\nGET\n',
+        algorithm: 'sha1',
+        secretName: 'watson',
+        encoding: 'hex',
+      },
+    };
+
+    const tokenModel = new RsaToken(rsaOptions);
+
+    const expectedJson = {
+      name: 'rsa_sig',
+      type: 'rsa',
+      cacheOverride: null,
+      skipCache: false,
+      options: {
+        stringToSign: 'application/json\nGET\n',
+        algorithm: 'sha1',
+        secretName: 'watson',
+        encoding: 'hex',
+      },
+    };
+
+    assert.deepEqual(tokenModel.toJSON(), expectedJson);
+  });
+
+  test('will include an error if instantiated with missing options', (assert) => {
+    const rsaOptions = {
+      name: 'rsa_sig',
+      options: {
+        stringToSign: 'application/json\nGET\n',
+        algorithm: 'invalid',
+        encoding: 'neo',
+      },
+    };
+
+    const tokenModel = new RsaToken(rsaOptions);
+
+    const expectedErrors = [
+      'RSA algorithm is invalid',
+      'RSA secret name not provided',
+      'RSA encoding is invalid',
     ];
     assert.deepEqual(tokenModel.errors, expectedErrors);
   });

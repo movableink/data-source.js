@@ -6,6 +6,7 @@ export {
   ReplaceLargeToken,
   SecretToken,
   HmacToken,
+  RsaToken,
   Sha1Token,
 } from './token-builder/types';
 

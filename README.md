@@ -19,6 +19,7 @@ Data Source is a JS library meant to help developers access Movable Ink Data Sou
       - [Details on how Sorcerer determines priority](#details-on-how-sorcerer-determines-priority)
   - [Publishing package:](#publishing-package)
   - [Changelog](#changelog)
+    - [3.2.0](#320)
     - [3.1.0](#310)
     - [3.0.0](#300)
     - [2.0.0](#200)
@@ -332,6 +333,10 @@ $ npm publish
 ---
 
 ## Changelog
+
+### 3.2.0
+
+- Adds RSA Signature support via `RsaToken` token utility class
 
 ### 3.1.0
 
