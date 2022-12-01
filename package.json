@@ -1,6 +1,6 @@
 {
   "name": "@movable-internal/data-source.js",
-  "version": "3.2.1-rc",
+  "version": "3.2.1",
   "main": "./dist/index.js",
   "module": "./dist/index.es.js",
   "license": "MIT",
