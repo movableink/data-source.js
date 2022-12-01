@@ -19,6 +19,7 @@ Data Source is a JS library meant to help developers access Movable Ink Data Sou
       - [Details on how Sorcerer determines priority](#details-on-how-sorcerer-determines-priority)
   - [Publishing package:](#publishing-package)
   - [Changelog](#changelog)
+    - [3.2.1](#321)
     - [3.2.0](#320)
     - [3.1.0](#310)
     - [3.0.0](#300)
@@ -333,6 +334,9 @@ $ npm publish
 ---
 
 ## Changelog
+### 3.2.1
+
+- Runs `yarn upgrade --recursive` to fix CVE vulnerability in sub-dependency and general updates for all sub-dependencies
 
 ### 3.2.0
 
