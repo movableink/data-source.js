@@ -12,4 +12,4 @@
 
 #### Dependencies (if any)
 
-:house: [chXXXX](https://app.clubhouse.io/movableink/story/XXXX)
+:house: [scXXXX](https://app.shortcut.io/movableink/story/XXXX)
