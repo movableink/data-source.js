@@ -46,14 +46,75 @@ export default class DataSource {
       .join('&');
 
     const url = `${this.sorcererUrlBase}/${this.key}?${paramStr}`;
+    const isTokenBuilder = options['body'] && JSON.parse(options['body']).tokenApiVersion;
 
     options['cacheTime'] = options['cacheTime'] || 10 * 1000;
     options['headers'] = options['headers'] || {};
 
     options['headers']['x-reverse-proxy-ttl'] = options['cacheTime'] / 1000;
-    options['headers']['x-mi-cbe'] = CD._hashForRequest(url, options);
+    options['headers']['x-mi-cbe'] = isTokenBuilder
+      ? this.generateTokenBuilderHash(params, options)
+      : this.generateHash(params, options);
 
     return CD.get(url, options);
+  }
+
+  /**
+   *
+   * @param params
+   * @param options
+   */
+  generateTokenBuilderHash(params: TargetingParams, options = {}): number | string {
+    options = structuredClone(options);
+    const { tokenApiVersion, tokens = [] } = JSON.parse(options['body']);
+    const cacheFragments = tokens.map(
+      (x: { skipCache: boolean; cacheOverride: string; value: string }) => {
+        if (x.skipCache) return true;
+        return x.cacheOverride || x.value;
+      }
+    );
+
+    options['body'] = JSON.stringify({ tokenApiVersion, tokens: cacheFragments });
+
+    const cacheString = `${this.key}${JSON.stringify(params)}${JSON.stringify(options)}`;
+
+    return this.hashString(cacheString);
+  }
+
+  /**
+   *
+   * @param params
+   * @param options
+   */
+  generateHash(params: TargetingParams, options = {}): number | string {
+    params = structuredClone(params); // don't want to modify original params
+    const ignoredParams = options['headers']['x-cache-ignored-query-params'];
+    let cacheString: string;
+
+    if (ignoredParams) {
+      for (const param of ignoredParams.split(',')) {
+        delete params[param];
+      }
+      cacheString = `${this.key}${JSON.stringify(params)}${JSON.stringify(options)}`;
+    } else {
+      cacheString = `${this.key}${JSON.stringify(params)}${JSON.stringify(options)}`;
+    }
+    return this.hashString(cacheString);
+  }
+
+  /**
+   *
+   * @param str
+   */
+  hashString(cacheString: string): number | string {
+    let hash = 0;
+    if (cacheString.length === 0) return hash;
+
+    for (let i = 0; i < cacheString.length; i++) {
+      hash = ((hash << 5) - hash + cacheString.charCodeAt(i)) & 0xffffffff;
+    }
+
+    return hash.toString();
   }
 
   /**
