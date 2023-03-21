@@ -53,7 +53,7 @@ export default class DataSource {
 
     options['headers']['x-reverse-proxy-ttl'] = options['cacheTime'] / 1000;
     options['headers']['x-mi-cbe'] = isTokenBuilder
-      ? this.generateTokenBuilderHash(params, options)
+      ? this.generateTokenBuilderHash(options)
       : this.generateHash(params, options);
 
     return CD.get(url, options);
@@ -61,10 +61,9 @@ export default class DataSource {
 
   /**
    *
-   * @param params
    * @param options
    */
-  generateTokenBuilderHash(params: TargetingParams, options = {}): number | string {
+  generateTokenBuilderHash(options = {}): number | string {
     options = structuredClone(options);
     const { tokenApiVersion, tokens = [] } = JSON.parse(options['body']);
     const cacheFragments = tokens.map(
@@ -76,7 +75,7 @@ export default class DataSource {
 
     options['body'] = JSON.stringify({ tokenApiVersion, tokens: cacheFragments });
 
-    const cacheString = `${this.key}${JSON.stringify(params)}${JSON.stringify(options)}`;
+    const cacheString = `${this.key}${JSON.stringify(options)}`;
 
     return this.hashString(cacheString);
   }
