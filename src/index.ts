@@ -66,12 +66,16 @@ export default class DataSource {
   generateTokenBuilderHash(options = {}): number | string {
     options = structuredClone(options);
     const { tokenApiVersion, tokens = [] } = JSON.parse(options['body']);
-    const cacheFragments = tokens.map(
-      (x: { skipCache: boolean; cacheOverride: string; value: string }) => {
-        if (x.skipCache) return true;
-        return x.cacheOverride || x.value;
+
+    const cacheFragments = tokens.reduce((acc, token) => {
+      if (!token.skipCache) {
+        const keyPair = {};
+        const { cacheOverride, value, name } = token;
+        keyPair[name] = cacheOverride || value;
+        acc.push(keyPair);
       }
-    );
+      return acc;
+    }, []);
 
     options['body'] = JSON.stringify({ tokenApiVersion, tokens: cacheFragments });
 
@@ -87,17 +91,13 @@ export default class DataSource {
    */
   generateHash(params: TargetingParams, options = {}): number | string {
     params = structuredClone(params); // don't want to modify original params
-    const ignoredParams = options['headers']['x-cache-ignored-query-params'];
-    let cacheString: string;
+    const ignoredParams = options['headers']['x-cache-ignored-query-params'] || '';
 
-    if (ignoredParams) {
-      for (const param of ignoredParams.split(',')) {
-        delete params[param];
-      }
-      cacheString = `${this.key}${JSON.stringify(params)}${JSON.stringify(options)}`;
-    } else {
-      cacheString = `${this.key}${JSON.stringify(params)}${JSON.stringify(options)}`;
+    for (const param of ignoredParams.split(',')) {
+      delete params[param];
     }
+    const cacheString = `${this.key}${JSON.stringify(params)}${JSON.stringify(options)}`;
+
     return this.hashString(cacheString);
   }
 
