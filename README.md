@@ -334,6 +334,9 @@ $ npm publish
 ---
 
 ## Changelog
+### 3.2.2
+
+- Updates `x-mi-cbe` header hash calculation to ignore params/tokens passed through `x-cache-ignored-query-params` and `skipCache: true` respectively
 ### 3.2.1
 
 - Runs `yarn upgrade --recursive` to fix CVE vulnerability in sub-dependency and general updates for all sub-dependencies
