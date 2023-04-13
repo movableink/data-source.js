@@ -19,6 +19,8 @@ Data Source is a JS library meant to help developers access Movable Ink Data Sou
       - [Details on how Sorcerer determines priority](#details-on-how-sorcerer-determines-priority)
   - [Publishing package:](#publishing-package)
   - [Changelog](#changelog)
+    - [3.2.3](#323)
+    - [3.2.2](#322)
     - [3.2.1](#321)
     - [3.2.0](#320)
     - [3.1.0](#310)
@@ -334,9 +336,15 @@ $ npm publish
 ---
 
 ## Changelog
+
+### 3.2.3
+
+- Fixes `x-mi-cbe` header hash calculation to use correct `x-cache-ignore-query-params` header
+
 ### 3.2.2
 
 - Updates `x-mi-cbe` header hash calculation to ignore params/tokens passed through `x-cache-ignored-query-params` and `skipCache: true` respectively
+
 ### 3.2.1
 
 - Runs `yarn upgrade --recursive` to fix CVE vulnerability in sub-dependency and general updates for all sub-dependencies

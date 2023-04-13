@@ -91,7 +91,7 @@ export default class DataSource {
    */
   generateHash(params: TargetingParams, options = {}): number | string {
     params = structuredClone(params); // don't want to modify original params
-    const ignoredParams = options['headers']['x-cache-ignored-query-params'] || '';
+    const ignoredParams = options['headers']['x-cache-ignore-query-params'] || '';
 
     for (const param of ignoredParams.split(',')) {
       delete params[param];
