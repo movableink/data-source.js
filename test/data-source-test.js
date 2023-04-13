@@ -21,7 +21,7 @@ test('getRawData makes a get request through cropduster with query params', func
   CD.get.restore();
 });
 
-test('x-mi-cbe calculation should not use query params passed via the "x-cache-ignored-query-params" header', async function (assert) {
+test('x-mi-cbe calculation should not use query params passed via the "x-cache-ignore-query-params" header', async function (assert) {
   sinon.stub(CD, 'get');
 
   const dataSource = new DataSource('some_key');
@@ -44,7 +44,7 @@ test('x-mi-cbe calculation should not use query params passed via the "x-cache-i
   };
 
   const options = {
-    headers: { 'x-cache-ignored-query-params': 'ignored_param' },
+    headers: { 'x-cache-ignore-query-params': 'ignored_param' },
   };
 
   await dataSource.getRawData(keysA, options);
@@ -203,7 +203,8 @@ test('getRawData will stringify object values in targeting params', function (as
 
 test('getMultipleTargets JSON parses response and returns data', async function (assert) {
   const response = {
-    data: '[{"Level":"1","Tier":"Silver","Content":"Tom and Jerry"},{"Level":"2","Tier":"Gold","Content":"Peter Pan"},{"Level":"1","Tier":"Silver","Content":"Marry Poppins"}]',
+    data:
+      '[{"Level":"1","Tier":"Silver","Content":"Tom and Jerry"},{"Level":"2","Tier":"Gold","Content":"Peter Pan"},{"Level":"1","Tier":"Silver","Content":"Marry Poppins"}]',
   };
 
   sinon.stub(CD, 'get').resolves(response);
@@ -238,7 +239,8 @@ test('getMultipleTargets JSON parses response and returns data', async function 
 
 test('getLocationTargets appends mi to internal query params and returns all geotargeting rows', async function (assert) {
   const response = {
-    data: '[{"latitude":"12.34","longitude":"-56.78","name":"Tom and Jerry"},{"latitude":"91.11","longitude":"-12.45","name":"Peter Pan"}]',
+    data:
+      '[{"latitude":"12.34","longitude":"-56.78","name":"Tom and Jerry"},{"latitude":"91.11","longitude":"-12.45","name":"Peter Pan"}]',
   };
 
   sinon.stub(CD, 'get').resolves(response);
