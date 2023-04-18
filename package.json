@@ -41,7 +41,7 @@
     "registry": "https://packagecloud.io/movableink/studio/npm"
   },
   "dependencies": {
-    "cropduster": "~7.1.0"
+    "cropduster": "^8.0.0"
   },
   "husky": {
     "hooks": {

@@ -1068,10 +1068,10 @@ cosmiconfig@^7.0.0:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
-cropduster@~7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/cropduster/-/cropduster-7.1.0.tgz#dd5f51a42a1afeaa1e0447cc6061715b9cdcbf16"
-  integrity sha512-bLGcGEgPkyWemcbODPvxSOVwFgnP74oXBiLIazQgqaddwoCVE6YGWrZOw6Pkj45yYxoY7UiRu5gdQ4cebViq+A==
+cropduster@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/cropduster/-/cropduster-8.0.0.tgz#3eaaf81435741e373bf4c48bb153ce88637aaa35"
+  integrity sha512-1AWuUFAo6LC7ZhiKrr3L+47KpeDeXhE3hw96y2ToLIKQDS7XyY1cfFB72ybX9Y/fxNG6r6bh/71aZqE18Zt6DA==
 
 cross-spawn@^7.0.0, cross-spawn@^7.0.2:
   version "7.0.3"
