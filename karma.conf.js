@@ -1,9 +1,5 @@
 const isDocker = require('is-docker');
 const watchMode = process.env.KARMA_WATCH === 'true' || true;
-const babel = require('rollup-plugin-babel');
-const resolve = require('rollup-plugin-node-resolve');
-const commonjs = require('@rollup/plugin-commonjs');
-const babelConf = require('./babel-config');
 
 module.exports = function karmaConfig(config) {
   config.set({
@@ -18,22 +14,11 @@ module.exports = function karmaConfig(config) {
       },
     },
     preprocessors: {
-      'test/**/*.js': ['rollup'],
+      'test/**/*.js': ['esbuild'],
     },
-    rollupPreprocessor: {
-      input: 'test/data-source-test.js',
-      context: 'window',
-      plugins: [
-        babel(babelConf),
-        resolve({
-          extensions: ['.mjs', '.js', '.ts'],
-        }),
-        commonjs(),
-      ],
-      output: {
-        format: 'iife',
-        name: 'dataSourceJSTests',
-        sourcemap: 'inline',
+    esbuild: {
+      define: {
+        global: 'window',
       },
     },
     autoWatch: watchMode,
