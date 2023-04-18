@@ -1,6 +1,6 @@
 {
   "name": "@movable-internal/data-source.js",
-  "version": "3.2.3",
+  "version": "4.0.0",
   "main": "./dist/index.js",
   "module": "./dist/index.es.js",
   "license": "MIT",
@@ -10,22 +10,16 @@
     "tsconfig.json"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "yarn clean && node build.js && tsc --emitDeclarationOnly --outDir dist",
+    "clean": "rimraf dist",
     "test": "tsc && karma start --single-run",
     "prepublishOnly": "yarn build"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.5",
-    "@babel/plugin-external-helpers": "^7.7.4",
-    "@babel/plugin-proposal-class-properties": "^7.7.4",
-    "@babel/plugin-transform-runtime": "^7.7.6",
-    "@babel/preset-env": "^7.11.0",
-    "@babel/preset-typescript": "^7.3.3",
-    "@babel/runtime-corejs2": "^7.5.4",
     "@movable/eslint-config": "^0.6.9",
     "@movable/eslint-config-typescript": "^0.2.0",
     "@movable/prettier-config": "^0.3.6",
-    "@rollup/plugin-commonjs": "^15.1.0",
+    "esbuild": "^0.16.17",
     "eslint": "^7.19.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
@@ -33,24 +27,21 @@
     "eslint-plugin-promise": "^4.2.1",
     "husky": "^4.3.8",
     "is-docker": "^2.0.0",
-    "karma": "^6.0.3",
-    "karma-chrome-launcher": "^3.1.0",
-    "karma-qunit": "^4.0.0",
-    "karma-rollup-preprocessor": "^7.0.2",
+    "karma": "^6.4.1",
+    "karma-chrome-launcher": "^3.1.1",
+    "karma-esbuild": "^2.2.5",
+    "karma-qunit": "^4.1.2",
     "lint-staged": "^10.5.3",
-    "qunit": "^2.9.3",
-    "rollup": "^2.3.2",
-    "rollup-plugin-babel": "^4.3.3",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-peer-deps-external": "^2.0.0",
-    "sinon": "^9.2.4"
+    "qunit": "^2.19.4",
+    "rimraf": "^5.0.0",
+    "sinon": "^15.0.3",
+    "typescript": "5.0.4"
   },
   "publishConfig": {
     "registry": "https://packagecloud.io/movableink/studio/npm"
   },
   "dependencies": {
-    "cropduster": "~7.1.0",
-    "typescript": "3.7.4"
+    "cropduster": "^8.0.0"
   },
   "husky": {
     "hooks": {

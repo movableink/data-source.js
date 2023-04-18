@@ -11,13 +11,64 @@ export {
 } from './token-builder/types';
 
 export interface TargetingParams {
-  [key: string]: string | number | Object[] | Object;
+  [key: string]: string | number | unknown;
+}
+
+export interface RequestParams {
+  [key: string]: string;
+}
+
+export interface RequestOptions {
+  headers?: RequestHeaders;
+  cacheTime?: number;
+  method?: string;
+  body?: string;
+}
+
+export interface RequestHeaders {
+  [key: string]: string;
+}
+
+export interface KeyPair {
+  [key: string]: string | undefined;
+}
+
+export interface TokenHMACOptions {
+  algorithm: string;
+  secretValue: string;
+  encoding: string;
+}
+
+export interface TokenRSAOptions {
+  algorithm: string;
+  secretValue: string;
+  encoding: string;
+}
+
+export interface TokenSHA1Options {
+  text: string;
+  encoding: string;
+  tokens?: TokenSHA1SecretToken[];
+}
+
+export interface TokenSHA1SecretToken {
+  name: string;
+  path: string;
+}
+
+export interface Token {
+  name: string;
+  type: string;
+  cacheOverride?: string;
+  skipCache?: boolean;
+  value?: string;
+  options?: TokenHMACOptions | TokenRSAOptions | TokenSHA1Options;
 }
 
 export default class DataSource {
   key: string;
   sorcererUrlBase: string;
-  miParams: Object;
+  miParams: RequestParams;
 
   constructor(key: string) {
     this.key = key;
@@ -37,7 +88,7 @@ export default class DataSource {
    * @param params
    * @param options
    */
-  getRawData(params: TargetingParams, options = {}): Promise<CDResponse> {
+  getRawData(params: TargetingParams, options: RequestOptions = {}): Promise<CDResponse> {
     const paramStr = Object.keys(params)
       .map((key) => {
         const value = typeof params[key] === 'object' ? JSON.stringify(params[key]) : params[key];
@@ -51,25 +102,25 @@ export default class DataSource {
     options['cacheTime'] = options['cacheTime'] || 10 * 1000;
     options['headers'] = options['headers'] || {};
 
-    options['headers']['x-reverse-proxy-ttl'] = options['cacheTime'] / 1000;
+    options['headers']['x-reverse-proxy-ttl'] = (options['cacheTime'] / 1000).toString();
     options['headers']['x-mi-cbe'] = isTokenBuilder
-      ? this.generateTokenBuilderHash(options)
-      : this.generateHash(params, options);
+      ? this.generateTokenBuilderHash(options).toString()
+      : this.generateHash(params, options).toString();
 
-    return CD.get(url, options);
+    return CD.get(url, options, null);
   }
 
   /**
    *
    * @param options
    */
-  generateTokenBuilderHash(options = {}): number | string {
+  generateTokenBuilderHash(options: RequestOptions = {}): number | string {
     options = structuredClone(options);
-    const { tokenApiVersion, tokens = [] } = JSON.parse(options['body']);
+    const { tokenApiVersion, tokens = [] } = JSON.parse(options['body'] || '{}');
 
-    const cacheFragments = tokens.reduce((acc, token) => {
+    const cacheFragments = tokens.reduce((acc: KeyPair[], token: Token) => {
       if (!token.skipCache) {
-        const keyPair = {};
+        const keyPair: KeyPair = {};
         const { cacheOverride, value, name } = token;
         keyPair[name] = cacheOverride || value;
         acc.push(keyPair);
@@ -89,9 +140,10 @@ export default class DataSource {
    * @param params
    * @param options
    */
-  generateHash(params: TargetingParams, options = {}): number | string {
+  generateHash(params: TargetingParams, options: RequestOptions = {}): number | string {
     params = structuredClone(params); // don't want to modify original params
-    const ignoredParams = options['headers']['x-cache-ignore-query-params'] || '';
+    const ignoredParams =
+      (options['headers'] && options['headers']['x-cache-ignore-query-params']) || '';
 
     for (const param of ignoredParams.split(',')) {
       delete params[param];
@@ -120,14 +172,15 @@ export default class DataSource {
    *
    * @param opts
    */
-  async getMultipleTargets(opts: any = {}) {
+  async getMultipleTargets(opts: RequestOptions = {}): Promise<unknown> {
     const params = {
       mi_multiple: true,
       mi_include_headers: true,
     };
 
     const { method = null } = opts;
-    if (!method && method.toLowerCase() !== 'post') {
+    // FIXME: logic error
+    if (!method && method?.toLowerCase() !== 'post') {
       throw new Error('Request method must be POST for getMultipleTargets');
     }
 
@@ -140,18 +193,21 @@ export default class DataSource {
    * @param params
    * @param opts
    */
-  async getLocationTargets(params: any = {}, opts: any = {}) {
-    const queryParams = {
-      mi_multiple: true,
-      mi_include_headers: true,
+  async getLocationTargets(
+    params: TargetingParams = {},
+    opts: RequestOptions = {}
+  ): Promise<unknown> {
+    const queryParams: RequestParams = {
+      mi_multiple: 'true',
+      mi_include_headers: 'true',
     };
 
     for (const key in params) {
-      const paramName = this.miParams[key];
+      const paramName: string = this.miParams[key];
       if (paramName) {
-        queryParams[paramName] = params[key];
+        queryParams[paramName] = params[key] + '';
       } else {
-        queryParams[key] = params[key];
+        queryParams[key] = params[key] + '';
       }
     }
 
