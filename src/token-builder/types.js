@@ -1,4 +1,4 @@
-const ALLOWED_ALGOS = new Set(['sha256', 'sha1', 'md5']);
+const ALLOWED_ALGOS = new Set(['sha256', 'sha1', 'md5', 'sha512']);
 const ALLOWED_ENCODINGS = new Set(['hex', 'base64', 'base64url', 'base64percent']);
 
 export const CHAR_LIMIT = 100;
