@@ -19,6 +19,7 @@ Data Source is a JS library meant to help developers access Movable Ink Data Sou
       - [Details on how Sorcerer determines priority](#details-on-how-sorcerer-determines-priority)
   - [Publishing package:](#publishing-package)
   - [Changelog](#changelog)
+    - [4.1.0](#410)
     - [3.2.3](#323)
     - [3.2.2](#322)
     - [3.2.1](#321)
@@ -336,6 +337,10 @@ $ npm publish
 ---
 
 ## Changelog
+
+### 4.1.0
+
+- allows to pass sha512 algorithm for HMAC token
 
 ### 3.2.3
 

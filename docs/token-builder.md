@@ -99,7 +99,7 @@ HMAC uses symmetric encryption which means the signature requires a shared secre
 **Params**
 - **options** (required)
   - **stringToSign** (optional) - any string that will be used when generating HMAC signature
-  - **algorithm** (required)- the hashing algorithm: `sha1` , `sha256`, `md5`
+  - **algorithm** (required)- the hashing algorithm: `sha1` , `sha256`, `sha512`, `md5`
   - **secretName** (required) - name of the data source secret (e.g. `watson`)
   - **encoding** (required) - option to encode the signature once it is generated: `hex`, `base64`, `base64url`, `base64percent`
       - `base64url` produces the same result as `base64` but in addition also replaces `+` with `-` , `/` with `_` , and removes the trailing padding character `=`
